@@ -70,3 +70,29 @@ export const addBook = ( book ) => {
     })
   }
 }
+
+export const deleteBook = ( bookID ) => {
+  return ( dispatch, getState ) => {
+    return fetch("/books/remove", {
+      method: 'POST',
+      body: JSON.stringify({id: bookID}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveBooks(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}

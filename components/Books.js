@@ -22,7 +22,7 @@ class Counter extends Component {
       return (
         <ul>
           {results.map(result =>
-            <SearchResult key={result.google_id} result={result} onClick={this.props.addBook} />
+            <SearchResult key={`r-${result.google_id}`} result={result} onClick={this.props.addBook} />
           )}
         </ul>
       )
@@ -34,7 +34,7 @@ class Counter extends Component {
       return (
         <ul>
           {books.map(book =>
-            <BookItem key={`b-${book.google_id}`} book={book} />
+            <BookItem key={`b-${book.google_id}`} book={book} deleteBook={this.props.deleteBook} />
           )}
         </ul>
       )

@@ -16,4 +16,5 @@ body {
   background-size: cover;
   display: inline-block;
   height: 150px;
-  width: 90px; }
+  width: 90px;
+  cursor: pointer; }
