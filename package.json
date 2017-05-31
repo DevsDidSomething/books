@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack -d --watch",
-    "watch:server": "nodemon index.js --exec babel-node --presets env,react"
+    "watch:server": "nodemon index.js --exec babel-node"
   },
   "author": "Kate Ray",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "sequelize": "^3.30.4",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-loader": "^7.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.1",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.17.2",

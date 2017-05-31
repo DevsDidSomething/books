@@ -39,7 +39,7 @@ var config = {
         })
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         include: __dirname,
         use: {

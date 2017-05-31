@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Books from '../components/Books'
+import Root from '../components/Root'
 import * as AppActions from '../actions'
 
 const mapStateToProps = (state) => ({
@@ -11,4 +11,4 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(AppActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Books)
+export default connect(mapStateToProps, mapDispatchToProps)(Root)

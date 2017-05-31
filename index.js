@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
 import bodyParser from 'body-parser'
 import http from 'http'
+import { StaticRouter } from 'react-router'
 
 import bookReducer from './reducers'
 import App from './containers/App'
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 
 app.use('/static', Express.static('static'));
 
-app.use('/books', routes);
+app.use('/m', routes);
 
 app.use(handleRender)
 
@@ -27,10 +28,15 @@ function handleRender(req, res) {
   models.Book.findAll().then( books => {
     models.Mix.findAll().then( mixes => {
       const store = createStore(bookReducer, {searchResults: [], books: books, mixes: mixes})
+      const context = {}
 
       const html = renderToString(
         <Provider store={store}>
-          <App />
+          <StaticRouter
+            location={req.url}
+            context={context}>
+            <App />
+          </StaticRouter>
         </Provider>
       )
 
@@ -38,7 +44,6 @@ function handleRender(req, res) {
       res.send(renderFullPage(html, preloadedState ))
     })
   })
-
 }
 
 function renderFullPage(html, preloadedState) {

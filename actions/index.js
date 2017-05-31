@@ -45,11 +45,11 @@ function receiveBooks(payload) {
   }
 }
 
-export const addBook = ( book ) => {
+export const addBook = ( book, mixName ) => {
   return ( dispatch, getState ) => {
-    return fetch("/books/save", {
+    return fetch("/m/save", {
       method: 'POST',
-      body: JSON.stringify(book),
+      body: JSON.stringify({book: book, mixName: mixName}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -73,7 +73,7 @@ export const addBook = ( book ) => {
 
 export const deleteBook = ( bookID ) => {
   return ( dispatch, getState ) => {
-    return fetch("/books/remove", {
+    return fetch("/m/remove", {
       method: 'POST',
       body: JSON.stringify({id: bookID}),
       headers: {
@@ -97,6 +97,32 @@ export const deleteBook = ( bookID ) => {
   }
 }
 
+export const deleteMix = ( mixID ) => {
+  return ( dispatch, getState ) => {
+    return fetch("/m/mixes/remove", {
+      method: 'POST',
+      body: JSON.stringify({id: mixID}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveMixes(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}
+
 export const RECEIVE_MIXES = `${PREFIX}.RECEIVE_MIXES`;
 function receiveMixes(payload) {
   return {
@@ -107,7 +133,7 @@ function receiveMixes(payload) {
 
 export const createMix = ( mixName ) => {
   return ( dispatch, getState ) => {
-    return fetch("/books/mix", {
+    return fetch("/m/mix", {
       method: 'POST',
       body: JSON.stringify({name: mixName}),
       headers: {

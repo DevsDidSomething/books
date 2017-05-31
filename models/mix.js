@@ -1,7 +1,8 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Mix = sequelize.define('Mix', {
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    webstring: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
