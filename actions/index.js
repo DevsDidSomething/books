@@ -96,3 +96,37 @@ export const deleteBook = ( bookID ) => {
     })
   }
 }
+
+export const RECEIVE_MIXES = `${PREFIX}.RECEIVE_MIXES`;
+function receiveMixes(payload) {
+  return {
+    type: RECEIVE_MIXES,
+    payload
+  }
+}
+
+export const createMix = ( mixName ) => {
+  return ( dispatch, getState ) => {
+    return fetch("/books/mix", {
+      method: 'POST',
+      body: JSON.stringify({name: mixName}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveMixes(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}

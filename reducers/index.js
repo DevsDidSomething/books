@@ -11,6 +11,10 @@ const app = (state = {searchResults: [], books: []}, action) => {
       return Object.assign({}, state, {
         books: action.payload
       })
+    case AppActions.RECEIVE_MIXES:
+      return Object.assign({}, state, {
+        mixes: action.payload
+      })
     default:
       return state
   }

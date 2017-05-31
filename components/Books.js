@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import SearchResult from './SearchResult'
 import BookItem from './BookItem'
+import MixItem from './MixItem'
+
 if ( process.env.BROWSER ) require('../css/App.scss');
 
 class Counter extends Component {
   constructor(props) {
     super(props)
     this.searchBook = this.searchBook.bind(this)
+    this.createMix = this.createMix.bind(this)
     this.state = {
       searchTerm: null
     }
@@ -15,6 +18,11 @@ class Counter extends Component {
   searchBook(e) {
     e.preventDefault();
     this.props.searchBook(this.state.searchTerm)
+  }
+
+  createMix(e) {
+    e.preventDefault();
+    this.props.createMix(this.state.mixName)
   }
 
   renderSearchResults(results) {
@@ -41,16 +49,32 @@ class Counter extends Component {
     }
   }
 
+  renderMixes(mixes) {
+    if (mixes.length) {
+      return (
+        <ul>
+          {mixes.map(mix =>
+            <MixItem key={mix.id} mix={mix} />
+          )}
+        </ul>
+      )
+    }
+  }
+
   render() {
     return (
       <div>
         <h1>
           Bookshelf
         </h1>
-        {this.renderSearchResults(this.props.app.searchResults)}
-        <form onSubmit={this.searchBook}>
-          <input onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" value={this.state.password} />
+        {this.renderMixes(this.props.app.mixes)}
+        <form onSubmit={this.createMix}>
+          <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" />
         </form>
+        <form onSubmit={this.searchBook}>
+          <input onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" />
+        </form>
+        {this.renderSearchResults(this.props.app.searchResults)}
         {this.renderBooks(this.props.app.books)}
       </div>
     )

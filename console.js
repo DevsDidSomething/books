@@ -11,4 +11,5 @@ models.sequelize.sync().then(function() {
   });
 
   replServer.context.Book = models.Book;
+  replServer.context.Mix = models.Mix;
 });

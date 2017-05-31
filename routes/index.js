@@ -39,4 +39,16 @@ router.post('/remove', (req, res) => {
   })
 })
 
+router.post('/mix', (req, res) => {
+  models.Mix.create({
+    name: req.body.name
+  }).then( (result) => {
+    models.Mix
+      .findAll()
+      .then(function(mixes){
+        res.json({status: 'success', message: 'Saved mix', data: mixes});
+      })
+  })
+})
+
 module.exports = router

@@ -25,16 +25,18 @@ app.use(handleRender)
 
 function handleRender(req, res) {
   models.Book.findAll().then( books => {
-    const store = createStore(bookReducer, {searchResults: [], books: books})
+    models.Mix.findAll().then( mixes => {
+      const store = createStore(bookReducer, {searchResults: [], books: books, mixes: mixes})
 
-    const html = renderToString(
-      <Provider store={store}>
-        <App />
-      </Provider>
-    )
+      const html = renderToString(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      )
 
-    const preloadedState = store.getState()
-    res.send(renderFullPage(html, preloadedState ))
+      const preloadedState = store.getState()
+      res.send(renderFullPage(html, preloadedState ))
+    })
   })
 
 }
