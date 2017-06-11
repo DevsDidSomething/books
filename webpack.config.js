@@ -8,7 +8,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 // });
 
 var config = {
-  entry: './client/index.js',
+  entry: './client/index.jsx',
   output: {
     path: path.join(__dirname, 'static'),
     filename: 'bundle.js'
@@ -47,6 +47,9 @@ var config = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['.scss', '.js', '.jsx'],
   },
   plugins: [new ExtractTextPlugin('bundle.css')],
 };

@@ -15,6 +15,10 @@ const app = (state = {searchResults: [], books: []}, action) => {
       return Object.assign({}, state, {
         mixes: action.payload
       })
+    case AppActions.GOOGLE_HAS_LOADED:
+      return Object.assign({}, state, {
+        googleLoaded: action.payload
+      })
     default:
       return state
   }

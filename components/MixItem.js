@@ -5,7 +5,7 @@ export default class MixItem extends Component {
   render() {
     return (
       <div className="mix-item">
-        <Link to={`/mixes/${this.props.mix.webstring}`}>
+        <Link to={`/mixes/${this.props.mix.id}/${this.props.mix.webstring}`}>
           {this.props.mix.name}
         </Link>
         <span

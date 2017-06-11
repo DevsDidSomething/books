@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch'
+
 const PREFIX = "appActions";
 
 export const GET_SEARCH_RESULTS = `${PREFIX}.GET_SEARCH_RESULTS`;
@@ -19,9 +21,9 @@ export const searchBook = ( searchTerm ) => {
       })
       .then( response => response.json() )
       .then( json => {
-        const results = json.items.filter(function(b){
+        const results = json.items.filter( (b) => {
           return b.volumeInfo.imageLinks
-        }).map( function ( b ) {
+        }).map( ( b ) => {
           return {
             src: b.volumeInfo.imageLinks.smallThumbnail,
             google_id: b.id,
@@ -45,14 +47,10 @@ function receiveBooks(payload) {
   }
 }
 
-export const addBook = ( book, mixName ) => {
+export const getBooks = ( mixID ) => {
   return ( dispatch, getState ) => {
-    return fetch("/m/save", {
-      method: 'POST',
-      body: JSON.stringify({book: book, mixName: mixName}),
-      headers: {
-        "Content-Type": "application/json"
-      }
+    return fetch(`http://localhost:3000/m/mixes/${mixID}`, {
+      method: 'GET'
     })
     .then( response => {
       if ( !response.ok ) {
@@ -71,9 +69,58 @@ export const addBook = ( book, mixName ) => {
   }
 }
 
-export const deleteBook = ( bookID ) => {
+export const getMixes = ( ) => {
   return ( dispatch, getState ) => {
-    return fetch("/m/remove", {
+    return fetch(`http://localhost:3000/m/allmixes`, {
+      method: 'GET'
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveMixes(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}
+
+export const addBook = ( book, mixID ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/mixes/${mixID}/save`, {
+      method: 'POST',
+      body: JSON.stringify({book: book, mixID: mixID}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveBooks(json.data))
+      dispatch(getSearchResults([]))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}
+
+export const deleteBook = ( bookID, mixID ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/mixes/${mixID}/remove`, {
       method: 'POST',
       body: JSON.stringify({id: bookID}),
       headers: {
@@ -128,6 +175,14 @@ function receiveMixes(payload) {
   return {
     type: RECEIVE_MIXES,
     payload
+  }
+}
+
+export const GOOGLE_HAS_LOADED = `${PREFIX}.GOOGLE_HAS_LOADED`;
+export const googleHasLoaded = () => {
+  return {
+    type: GOOGLE_HAS_LOADED,
+    payload: true
   }
 }
 
