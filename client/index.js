@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
@@ -16,7 +17,9 @@ delete window.__PRELOADED_STATE__
 const store = createStore(books, preloadedState, applyMiddleware(thunk))
 render(
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 )

@@ -3,13 +3,12 @@ import SearchResult from './SearchResult'
 import BookItem from './BookItem'
 import MixItem from './MixItem'
 
-if ( process.env.BROWSER ) require('../css/App.scss');
-
 class Counter extends Component {
   constructor(props) {
     super(props)
     this.searchBook = this.searchBook.bind(this)
     this.createMix = this.createMix.bind(this)
+    this.addBook = this.addBook.bind(this)
     this.state = {
       searchTerm: null
     }
@@ -25,12 +24,16 @@ class Counter extends Component {
     this.props.createMix(this.state.mixName)
   }
 
+  addBook(result){
+    this.props.addBook(result, this.props.match.params.filter)
+  }
+
   renderSearchResults(results) {
     if (results.length) {
       return (
         <ul>
           {results.map(result =>
-            <SearchResult key={`r-${result.google_id}`} result={result} onClick={this.props.addBook} />
+            <SearchResult key={`r-${result.google_id}`} result={result} onClick={this.addBook} />
           )}
         </ul>
       )
@@ -54,7 +57,7 @@ class Counter extends Component {
       return (
         <ul>
           {mixes.map(mix =>
-            <MixItem key={mix.id} mix={mix} />
+            <MixItem key={mix.id} mix={mix} deleteMix={this.props.deleteMix}/>
           )}
         </ul>
       )

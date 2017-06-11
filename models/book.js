@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // Book.belongsToMany(models.List, {through: 'BookList'});
+        Book.belongsToMany(models.Mix, {through: 'BookMix'});
       }
     }
   });
