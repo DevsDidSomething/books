@@ -211,3 +211,29 @@ export const createMix = ( mixName ) => {
     })
   }
 }
+
+export const updateMix = ( mixID, mixName ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/mixes/${mixID}`, {
+      method: 'PUT',
+      body: JSON.stringify({name: mixName}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveMixes(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}
