@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Edit from './Edit'
 import BookItem from './BookItem'
 import MixItem from './MixItem'
+import Mix from './Mix'
 import _ from 'lodash'
 
 class Books extends Component {
@@ -88,7 +88,6 @@ class Books extends Component {
   }
 
   render() {
-    console.log(this.state.selectedMix)
     return (
       <div>
         <div className="nav-container">
@@ -106,7 +105,7 @@ class Books extends Component {
           </form>
         }
         {this.state.selectedMix &&
-          <Edit mix={this.state.selectedMix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+          <Mix mix={this.state.selectedMix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
         }
         {this.renderBooks(this.props.app.books)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
