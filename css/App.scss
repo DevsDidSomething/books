@@ -1,10 +1,96 @@
+// Variables
+$blue: #18348a;
+$lightblue: #4f25d5;
+
+// Basic styles
 body {
   margin: 0px;
+  font-family: "Courier New", Courier, mono;
 }
+h1 {
+  font-weight: normal;
+}
+a {
+  text-decoration: none;
+}
+
+.button {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Layout
 #root {
   width: 900px;
   margin: auto;
 }
+
+// Nav
+.nav-container {
+  color: $blue;
+  border-bottom: 2px solid $blue;
+}
+
+// Mix items
+.mix-item-list {
+  padding: 20px 0px;
+}
+.mix-item {
+  color: $blue;
+  a {
+    color: $blue;
+
+    &:hover {
+      text-decoration: underline;
+      color: lighten($lightblue, 5%);
+    }
+  }
+
+  &.selected a {
+    color: $lightblue;
+    text-decoration: underline;
+  }
+
+  .separator {
+    padding: 0px 5px;
+  }
+}
+
+.create-mix-button {
+  cursor: pointer;
+  margin-left: 10px;
+  text-decoration: underline;
+}
+
+// Editing Mix
+.edit-mix-container {
+  padding: 10px;
+  background-color: $blue;
+  color: #fff;
+}
+
+.button.search-book {
+}
+
+.button.delete-mix {
+  color: #e30e4b;
+}
+
+// Book Items
+.book-item {
+  background-size: cover;
+  display: inline-block;
+  height: 200px;
+  width: 130px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+
+
+
 .search-result {
   width: 70px;
   height: 100px;
@@ -13,19 +99,7 @@ body {
   cursor: pointer;
 }
 
-// Book items
-.book-item {
-  background-size: cover;
-  display: inline-block;
-  height: 150px;
-  width: 90px;
-  cursor: pointer;
-}
 
-// Mix items
-.mix-item {
-  text-transform: capitalize;
-}
 
 input {
   width: 200px;

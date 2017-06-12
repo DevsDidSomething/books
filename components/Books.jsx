@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import SearchResult from './SearchResult'
 import BookItem from './BookItem'
 import MixItem from './MixItem'
+import _ from 'lodash'
 
 class Books extends Component {
   constructor(props) {
@@ -11,9 +12,13 @@ class Books extends Component {
     this.addBook = this.addBook.bind(this)
     this.deleteBook = this.deleteBook.bind(this)
     this.previewBook = this.previewBook.bind(this)
+    this.creatingMixMode = this.creatingMixMode.bind(this)
+    this.addingBookMode = this.addingBookMode.bind(this)
+    this.deleteMix = this.deleteMix.bind(this)
     this.state = {
+      mode: 'default',
       previewing: false,
-      mixID: null,
+      selectedMix: null,
       searchTerm: ''
     }
   }
@@ -52,11 +57,11 @@ class Books extends Component {
   renderBooks(books) {
     if (books.length) {
       return (
-        <ul>
+        <div>
           {books.map(book =>
             <BookItem key={`b-${book.google_id}`} book={book} deleteBook={this.deleteBook} previewBook={this.previewBook}/>
           )}
-        </ul>
+        </div>
       )
     }
   }
@@ -64,20 +69,26 @@ class Books extends Component {
   renderMixes(mixes) {
     if (mixes.length) {
       return (
-        <ul>
-          {mixes.map(mix =>
-            <MixItem key={mix.id} mix={mix} deleteMix={this.props.deleteMix}/>
+        <span>
+          {mixes.map( (mix, i) =>
+            <MixItem
+              key={ mix.id }
+              mix={ mix }
+              selected={ this.state.mix === mix }
+              isLast={ i === mixes.length-1 } />
           )}
-        </ul>
+        </span>
       )
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const mixID = nextProps.match.params.mix_id
-    if (mixID !== this.state.mixID) {
-      this.setState({mixID: mixID})
-      this.props.getBooks(mixID)
+    const mixID = parseInt(nextProps.match.params.mix_id)
+    const oldMixID = this.state.mix ? this.state.mix.id : null
+    if (this.props.app.mixes.length && (mixID !== oldMixID) ) {
+      const mix = _.find(this.props.app.mixes, {'id': mixID})
+      this.setState({mix: mix})
+      this.props.getBooks(mix.id)
     }
   }
 
@@ -95,20 +106,59 @@ class Books extends Component {
     }
   }
 
+  creatingMixMode() {
+    if (this.state.mode === 'creatingMix') {
+      this.setState({mode: 'default'})
+    } else {
+      this.setState({mode: 'creatingMix'})
+    }
+  }
+
+  addingBookMode() {
+    if (this.state.mode === 'addingBook') {
+      this.setState({mode: 'default'})
+    } else {
+      this.setState({mode: 'addingBook'})
+    }
+  }
+
+  deleteMix(){
+    if (this.state.mix) {
+      this.props.deleteMix(this.state.mix.id)
+    }
+  }
+
   render() {
     return (
       <div>
-        <h1>
-          Bookshelf
-        </h1>
-        {this.renderMixes(this.props.app.mixes)}
-        <form onSubmit={this.createMix}>
-          <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
-        </form>
-        <form onSubmit={this.searchBook}>
-          <input value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" />
-        </form>
-        {this.renderSearchResults(this.props.app.searchResults)}
+        <div className="nav-container">
+          <h1>
+            Bookshelf
+          </h1>
+        </div>
+        <div className='mix-item-list'>
+          {this.renderMixes(this.props.app.mixes)}
+          <span className='create-mix-button' onClick={this.creatingMixMode}>+ Create new mix</span>
+        </div>
+        {this.state.mode === 'creatingMix' &&
+          <form onSubmit={this.createMix}>
+            <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
+          </form>
+        }
+        <div className='edit-mix-container'>
+          Title: <input value={this.state.mix ? this.state.mix.name : ''}/>
+          <div className='search-book button' onClick={this.addingBookMode}>+ Add a book</div>
+          {this.state.mode === 'addingBook' &&
+            <span>
+              <form onSubmit={this.searchBook}>
+                <input value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" />
+              </form>
+              {this.renderSearchResults(this.props.app.searchResults)}
+            </span>
+          }
+          <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+
+        </div>
         {this.renderBooks(this.props.app.books)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
