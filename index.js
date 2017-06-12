@@ -75,9 +75,16 @@ app.post('/login',  (req, res, next) => {
             if (!user) {
               return res.status(422).send('no user somehow')
             }
-            req.login(user, (err) => {
-              if (err) { return res.status(422).send(err) }
-              return res.json({status: 'success', message: 'Succesfully created user', data: user});
+            models.Mix.create({
+              webstring: 'all',
+              name: 'all'
+            }).then( (mix) => {
+              mix.setUser(user).then( (result) => {
+                req.login(user, (err) => {
+                  if (err) { return res.status(422).send(err) }
+                  return res.json({status: 'success', message: 'Succesfully created user', data: user});
+                })
+              })
             })
           })
         })

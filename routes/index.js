@@ -1,15 +1,8 @@
-var models = require('../models/index')
-var express = require('express')
-var router  = express.Router()
+import models from '../models/index'
+import Express from 'express'
+import * as l from '../lib'
 
-function createWebString(text) {
-  if (text.length > 50) {
-    text = text.substring(0,50)
-  }
-  text = text.replace(/\s/g, '-')
-  text = encodeURIComponent(text)
-  return text
-}
+let router  = Express.Router()
 
 router.get('/', (req, res) => {
   models.Book
@@ -74,7 +67,7 @@ router.get('/allmixes', (req, res) => {
 
 router.put('/mixes/:mix_id', (req, res) => {
   var name = req.body.name
-  var webstring = createWebString(name)
+  var webstring = l.createWebString(name)
   models.Mix.update({
     name: name,
     webstring: webstring
@@ -97,14 +90,18 @@ router.get('/mixes/:mix_id', (req, res) => {
 })
 
 router.post('/mix', (req, res) => {
-  var name = req.body.name;
-  var webstring = createWebString(name)
+  if (!req.isAuthenticated()) {
+    return res.status(403).send('Not authorized')
+  }
+  var name = req.body.name
+  var webstring = l.createWebString(name)
   models.Mix.create({
     name: name,
-    webstring: webstring
-  }).then( (result) => {
+    webstring: webstring,
+    UserId: req.user.id
+  }).then( (mix) => {
     models.Mix
-      .findAll()
+      .findAll({where: {UserId: req.user.id}})
       .then( (mixes) => {
         res.json({status: 'success', message: 'Saved mix', data: mixes});
       })
