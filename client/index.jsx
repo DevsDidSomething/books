@@ -9,8 +9,10 @@ import books from '../reducers'
 import * as AppActions from '../actions'
 require('../css/App.scss')
 
+let el = document.getElementById('root')
+let user = JSON.parse(el.dataset.user)
 // Create Redux store with initial state
-const store = createStore(books, {searchResults: [], books: [], mixes: [], googleLoaded: false}, applyMiddleware(thunk))
+const store = createStore(books, {searchResults: [], books: [], mixes: [], googleLoaded: false, user: user}, applyMiddleware(thunk))
 
 // Load google books
 google.books.load()
@@ -24,5 +26,5 @@ render(
       <Route path="/mixes/:mix_id/:filter" component={App}/>
     </BrowserRouter>
   </Provider>,
-  document.getElementById('root')
+  el
 )

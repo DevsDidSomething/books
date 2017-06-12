@@ -6,7 +6,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Mix.belongsToMany(models.Book, {through: 'BookMix'});
+        Mix.belongsToMany(models.Book, {through: 'BookMix'})
+        Mix.belongsTo(models.User, {
+          onDelete: 'CASCADE'
+        })
       }
     }
   });

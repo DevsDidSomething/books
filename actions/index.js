@@ -2,6 +2,41 @@ import fetch from 'isomorphic-fetch'
 
 const PREFIX = "appActions";
 
+export const RECEIVE_USER = `${RECEIVE_USER}.GET_SEARCH_RESULTS`;
+function receiveUser(payload) {
+  return {
+    type: RECEIVE_USER,
+    payload
+  }
+}
+
+export const login = ( userInfo ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`http://localhost:3000/login`, {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify(userInfo),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => {
+      if ( !response.ok ) {
+        throw new Error(response.statusText)
+      }
+      return response
+    })
+    .then( response => response.json() )
+    .then( json => {
+      dispatch(receiveUser(json.data))
+    })
+    .catch ( e => {
+      console.log(e)
+      //TODO catch error
+    })
+  }
+}
+
 export const GET_SEARCH_RESULTS = `${PREFIX}.GET_SEARCH_RESULTS`;
 function getSearchResults(payload) {
   return {
@@ -50,7 +85,8 @@ function receiveBooks(payload) {
 export const getBooks = ( mixID ) => {
   return ( dispatch, getState ) => {
     return fetch(`http://localhost:3000/m/mixes/${mixID}`, {
-      method: 'GET'
+      method: 'GET',
+      credentials: 'include'
     })
     .then( response => {
       if ( !response.ok ) {
@@ -72,7 +108,8 @@ export const getBooks = ( mixID ) => {
 export const getMixes = ( ) => {
   return ( dispatch, getState ) => {
     return fetch(`http://localhost:3000/m/allmixes`, {
-      method: 'GET'
+      method: 'GET',
+      credentials: 'include'
     })
     .then( response => {
       if ( !response.ok ) {
@@ -94,6 +131,7 @@ export const getMixes = ( ) => {
 export const addBook = ( book, mixID ) => {
   return ( dispatch, getState ) => {
     return fetch(`/m/mixes/${mixID}/save`, {
+      credentials: 'include',
       method: 'POST',
       body: JSON.stringify({book: book, mixID: mixID}),
       headers: {
@@ -121,6 +159,7 @@ export const addBook = ( book, mixID ) => {
 export const deleteBook = ( bookID, mixID ) => {
   return ( dispatch, getState ) => {
     return fetch(`/m/mixes/${mixID}/remove`, {
+      credentials: 'include',
       method: 'POST',
       body: JSON.stringify({id: bookID}),
       headers: {
@@ -147,6 +186,7 @@ export const deleteBook = ( bookID, mixID ) => {
 export const deleteMix = ( mixID ) => {
   return ( dispatch, getState ) => {
     return fetch("/m/mixes/remove", {
+      credentials: 'include',
       method: 'POST',
       body: JSON.stringify({id: mixID}),
       headers: {
@@ -189,6 +229,7 @@ export const googleHasLoaded = () => {
 export const createMix = ( mixName ) => {
   return ( dispatch, getState ) => {
     return fetch("/m/mix", {
+      credentials: 'include',
       method: 'POST',
       body: JSON.stringify({name: mixName}),
       headers: {
@@ -215,6 +256,7 @@ export const createMix = ( mixName ) => {
 export const updateMix = ( mixID, mixName ) => {
   return ( dispatch, getState ) => {
     return fetch(`/m/mixes/${mixID}`, {
+      credentials: 'include',
       method: 'PUT',
       body: JSON.stringify({name: mixName}),
       headers: {

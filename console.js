@@ -10,6 +10,7 @@ models.sequelize.sync().then(function() {
     prompt: "Bookshelf (" + envName + ") > ",
   });
 
+  replServer.context.User = models.User;
   replServer.context.Book = models.Book;
   replServer.context.Mix = models.Mix;
 });

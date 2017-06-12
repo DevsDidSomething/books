@@ -1,7 +1,7 @@
 import * as AppActions from "../actions/index"
 
 //TODO why does this initial state get overwritten?
-const app = (state = {searchResults: [], books: []}, action) => {
+const app = (state = {}, action) => {
   switch (action.type) {
     case AppActions.GET_SEARCH_RESULTS:
       return Object.assign({}, state, {
@@ -14,6 +14,10 @@ const app = (state = {searchResults: [], books: []}, action) => {
     case AppActions.RECEIVE_MIXES:
       return Object.assign({}, state, {
         mixes: action.payload
+      })
+    case AppActions.RECEIVE_USER:
+      return Object.assign({}, state, {
+        user: action.payload
       })
     case AppActions.GOOGLE_HAS_LOADED:
       return Object.assign({}, state, {
