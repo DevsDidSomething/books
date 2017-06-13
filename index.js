@@ -58,8 +58,12 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 });
 
+function userData(user) {
+  return {id: user.id, username: user.username, email: user.email}
+}
+
 app.post('/login',  (req, res, next) => {
-  models.User.findOne({where: {username: req.body.username }}).then( (user) => {
+  models.User.findOne({where: {username: req.body.username }, attributes: ['id', 'username', 'email']}).then( (user) => {
     if (!user) {
       bcrypt.genSalt(10, (err, salt) => {
         if (err) return res.status(422).send(err)
@@ -83,7 +87,7 @@ app.post('/login',  (req, res, next) => {
               mix.setUser(user).then( (result) => {
                 req.login(user, (err) => {
                   if (err) { return res.status(422).send(err) }
-                  return res.json({status: 'success', message: 'Succesfully created user', data: user});
+                  return res.json({status: 'success', message: 'Succesfully created user', data: userData(user)});
                 })
               })
             })
@@ -98,7 +102,7 @@ app.post('/login',  (req, res, next) => {
         }
         req.login(user, (err) => {
           if (err) { return res.status(422).send(err) }
-          return res.json({status: 'success', message: 'Login successful', data: user});
+          return res.json({status: 'success', message: 'Login successful', data: userData(user)});
         })
       })(req, res, next)
     }
@@ -112,7 +116,7 @@ app.get('*', (req, res) => {
       console.error('read err', err)
       return res.status(404).end()
     }
-    const user = req.isAuthenticated() ? req.user.id : false
+    const user = req.isAuthenticated() ? userData(req.user) : false
     const RenderedApp = htmlData.replace('{{USER}}', JSON.stringify(user))
     res.send(RenderedApp)
   })

@@ -18,9 +18,11 @@ router.put('/:mix_uid', requiresLogin)
 router.post('/mixes', requiresLogin)
 router.delete('/:mix_uid/books/:book_id', requiresLogin)
 
+const publicUserAttributes = ['id', 'username']
+
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
-  models.User.findOne({where: {username: req.params.username}, include: [ models.Mix ]}).then( (user) => {
+  models.User.findOne({where: {username: req.params.username}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
     if ( parseInt(req.params.mix_uid) === 0 ) {
       models.Mix.findOne({where: {UserId: user.id, name: 'all'}, include: [ models.Book ]}).then( (mixAll) => {
         let bookshelf = {user: user, mix: mixAll}
