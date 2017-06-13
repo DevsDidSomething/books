@@ -12,7 +12,7 @@ require('../css/App.scss')
 let el = document.getElementById('root')
 let user = JSON.parse(el.dataset.user)
 // Create Redux store with initial state
-const store = createStore(books, {searchResults: [], books: [], mixes: [], googleLoaded: false, user: user}, applyMiddleware(thunk))
+const store = createStore(books, {app: {searchResults: [], googleLoaded: false, user: user}, bookshelf: {} }, applyMiddleware(thunk))
 
 // Load google books
 google.books.load()
@@ -23,7 +23,7 @@ google.books.setOnLoadCallback( () => {
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <Route path="/mixes/:mix_id/:filter" component={App}/>
+      <Route path="/:username/mixes/:mix_id" component={App}/>
     </BrowserRouter>
   </Provider>,
   el

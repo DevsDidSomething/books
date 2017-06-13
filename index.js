@@ -103,7 +103,7 @@ app.post('/login',  (req, res, next) => {
     }
   })
 })
-app.use('/m', routes);
+app.use('/m', routes)
 
 app.get('*', (req, res) => {
   fs.readFile(path.join(__dirname+'/client/public/index.html'), 'utf8', (err, htmlData)=>{

@@ -40,16 +40,17 @@ class Books extends Component {
     }
   }
 
-  renderMixes(mixes) {
-    if (mixes.length) {
+  renderMixes(user) {
+    if (user.Mixes.length) {
       return (
         <span>
-          {mixes.map( (mix, i) =>
+          {user.Mixes.map( (mix, i) =>
             <MixItem
               key={ mix.id }
+              username={ user.username }
               mix={ mix }
-              selected={ this.state.selectedMix === mix }
-              isLast={ i === mixes.length-1 } />
+              selected={ this.props.bookshelf.mix.id === mix.id }
+              isLast={ i === user.Mixes.length-1 } />
           )}
         </span>
       )
@@ -57,17 +58,17 @@ class Books extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const mixID = parseInt(nextProps.match.params.mix_id)
-    const oldMixID = this.state.selectedMix ? this.state.selectedMix.id : null
-    if (this.props.app.mixes.length && (mixID !== oldMixID) ) {
-      const mix = _.find(this.props.app.mixes, {'id': mixID})
-      this.setState({selectedMix: mix})
-      this.props.getBooks(mix.id)
+    const params = nextProps.match.params
+    const mixID = parseInt(params.mix_id)
+    const username = params.username
+    const bookshelf = this.props.bookshelf
+    if (_.isEmpty(bookshelf)) {
+      this.props.getBookshelf(username, mixID)
+    } else {
+      if ( (bookshelf.user.username !== username) || (bookshelf.mix.id !== mixID)) {
+        this.props.getBookshelf(username, mixID)
+      }
     }
-  }
-
-  componentWillMount(x){
-    this.props.getMixes()
   }
 
   previewBook( google_id ) {
@@ -103,7 +104,9 @@ class Books extends Component {
           }
         </div>
         <div className='mix-item-list'>
-          {this.renderMixes(this.props.app.mixes)}
+          {!_.isEmpty(this.props.bookshelf) &&
+            this.renderMixes(this.props.bookshelf.user)
+          }
           <span className='create-mix-button' onClick={this.creatingMixMode}>+ Create new mix</span>
         </div>
         {this.state.mode === 'creatingMix' &&
@@ -111,10 +114,12 @@ class Books extends Component {
             <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
           </form>
         }
-        {this.state.selectedMix &&
-          <Mix mix={this.state.selectedMix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+        {!_.isEmpty(this.props.bookshelf) &&
+          <span>
+            <Mix mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+            {this.renderBooks(this.props.bookshelf.mix.Books)}
+          </span>
         }
-        {this.renderBooks(this.props.app.books)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
           <div className='close-preview' onClick={() => this.setState({previewing: false})}>x</div>

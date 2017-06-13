@@ -1,110 +1,150 @@
 import models from '../models/index'
 import Express from 'express'
 import * as l from '../lib'
+import _ from 'lodash'
 
 let router  = Express.Router()
 
-router.get('/', (req, res) => {
-  models.Book
-    .findAll()
-    .then( books => {
-      res.json({status: 'success', message: 'Retrieved all books', data: books});
+function requiresLogin( req, res, next ) {
+  if (!req.isAuthenticated()) {
+    return res.status(403).send('You must be logged in')
+  }
+  next()
+}
+
+router.post('/:mix_id/books', requiresLogin)
+router.delete('/:mix_id', requiresLogin)
+router.put('/:mix_id', requiresLogin)
+router.post('/mixes', requiresLogin)
+router.delete('/:mix_id/books/:book_id', requiresLogin)
+
+// Get a full bookshelf (initial load)
+router.get('/:username/:mix_id', (req, res) => {
+  models.User.findOne({where: {username: req.params.username}, include: [ models.Mix ]}).then( (user) => {
+    models.Mix.findOne({where: {id: req.params.mix_id, UserId: user.id}, include: [ models.Book ]}).then( (mix) => {
+      let bookshelf = {user: user, mix: mix}
+      res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
     })
+  })
 })
 
-
-router.post('/mixes/:mix_id/save', (req, res) => {
-  var book = req.body.book
-  models.Book.create({
-    title: book.title,
-    author: book.author,
-    src: book.src,
-    google_id: book.google_id
-  }).then( (result) => {
-    models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
-      result.setMixes([mix]).then( () => {
-        mix.getBooks()
-          .then( (books) => {
-            res.json({status: 'success', message: 'Saved book', data: books});
+// Save a book
+router.post('/:mix_id/books', (req, res) => {
+  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+    if (mix.UserId !== req.user.id) {
+      return res.status(403).send('Not authorized to edit this mix')
+    }
+    let bookData = req.body.book
+    models.Book.findOne({where: {google_id: bookData.google_id}}).then( (book) => {
+      if (book){
+        book.getMixes().then( (bookMixes) => {
+          models.Mix.findOne({where: {UserId: req.user.id, name: 'all'}}).then( (mixAll) => {
+            bookMixes.push(mix, mixAll)
+            book.setMixes(_.uniq(bookMixes)).then( () => {
+              mix.getBooks().then( (books) => {
+                res.json({status: 'success', message: 'Saved book', data: books});
+              })
+            })
           })
+        })
+      } else {
+        models.Book.create({
+          title: bookData.title,
+          author: bookData.author,
+          src: bookData.src,
+          google_id: bookData.google_id
+        }).then( (book) => {
+          models.Mix.findOne({where: {UserId: req.user.id, name: 'all'}}).then( (mixAll) => {
+            book.setMixes([mix, mixAll]).then( () => {
+              mix.getBooks().then( (books) => {
+                res.json({status: 'success', message: 'Saved book', data: books});
+              })
+            })
+          })
+        })
+      }
+    })
+  })
+})
+
+router.delete('/:mix_id/books/:book_id', (req, res) => {
+  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+    if (mix.UserId !== req.user.id) {
+      return res.status(403).send('Not authorized to delete books from this mix')
+    }
+    models.Book.findOne({where: {id: req.params.book_id}}).then( (book) => {
+      book.getMixes().then( (bookMixes) => {
+        _.remove(bookMixes, {
+          id: mix.id
+        })
+        // TODO see if it belongs to any of the users other mixes besides all
+        // if not, delete it from both this mix and all
+        book.setMixes(bookMixes).then( (result) => {
+          mix.getBooks().then( (books) => {
+            res.json({status: 'success', message: 'Removed book', data: books});
+          })
+        })
       })
     })
   })
 })
 
-router.post('/mixes/:mix_id/remove', (req, res) => {
-  models.Book.destroy({
-    where: {id: req.body.id}
-  }).then( (result) => {
-    models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
-      mix.getBooks()
-      .then( (books) => {
-        res.json({status: 'success', message: 'Saved book', data: books});
-      })
-    })
-  })
-})
-
-router.post('/mixes/remove', (req, res) => {
-  models.Mix.destroy({
-    where: {id: req.body.id}
-  }).then( (result) => {
-    models.Mix
-      .findAll()
-      .then( (mixes) => {
+// Delete a Mix
+router.delete('/:mix_id', (req, res) => {
+  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+    if (mix.UserId !== req.user.id) {
+      return res.status(403).send('Not authorized to delete this mix')
+    }
+    if (mix.name === 'all') {
+      return res.status(403).send('You cannot delete the default mix')
+    }
+    mix.destroy().then( () => {
+      // TODO send them to 'all' after this
+      models.Mix.findAll({where: {UserId: req.user.id}}).then( (mixes) => {
         res.json({status: 'success', message: 'Saved book', data: mixes});
       })
+    })
   })
 })
 
-router.get('/allmixes', (req, res) => {
-  models.Mix
-    .findAll()
-    .then( mixes => {
-      res.json({status: 'success', message: 'Retrieved all books', data: mixes});
-    })
-})
-
-router.put('/mixes/:mix_id', (req, res) => {
-  var name = req.body.name
-  var webstring = l.createWebString(name)
-  models.Mix.update({
-    name: name,
-    webstring: webstring
-  }, {where: {id: req.params.mix_id}}).then( (result) => {
-    models.Mix
-      .findAll()
-      .then( (mixes) => {
+// Update Mix
+router.put('/:mix_id', (req, res) => {
+  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+    if (mix.UserId !== req.user.id) {
+      return res.status(403).send('Not authorized to delete this mix')
+    }
+    let name = req.body.name
+    if (name === 'all'){
+      return res.status(403).send('You cannot give this mix the default name')
+    }
+    let webstring = l.createWebString(name)
+    mix.update({
+      name: name,
+      webstring: webstring
+    }).then( (result) => {
+      models.Mix.findAll({where: {UserId: req.user.id}}).then( (mixes) => {
         res.json({status: 'success', message: 'Saved mix', data: mixes});
       })
+    })
   })
 })
 
-router.get('/mixes/:mix_id', (req, res) => {
-  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
-    mix.getBooks()
-      .then( books => {
-        res.json({status: 'success', message: 'Retrieved all books', data: books});
-      })
-    })
-})
-
-router.post('/mix', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(403).send('Not authorized')
+// Create a new Mix
+router.post('/mixes', (req, res) => {
+  let name = req.body.name
+  if (name === 'all'){
+    return res.status(403).send('You cannot give this mix the default name')
   }
-  var name = req.body.name
-  var webstring = l.createWebString(name)
+  let webstring = l.createWebString(name)
   models.Mix.create({
     name: name,
     webstring: webstring,
     UserId: req.user.id
   }).then( (mix) => {
-    models.Mix
-      .findAll({where: {UserId: req.user.id}})
-      .then( (mixes) => {
-        res.json({status: 'success', message: 'Saved mix', data: mixes});
-      })
+    // TODO send them to the new mix after this
+    models.Mix.findAll({where: {UserId: req.user.id}}).then( (mixes) => {
+      res.json({status: 'success', message: 'Saved mix', data: mixes});
+    })
   })
 })
 

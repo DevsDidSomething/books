@@ -1,19 +1,34 @@
+import { combineReducers } from 'redux'
 import * as AppActions from "../actions/index"
 
+const bookshelf = (state = {}, action) => {
+  switch (action.type) {
+    case AppActions.RECEIVE_BOOKSHELF:
+      return action.payload
+    case AppActions.RECEIVE_BOOKS:
+      return Object.assign({}, state, {
+        mix: {
+          ...state.mix,
+          Books: action.payload
+        }
+      })
+    case AppActions.RECEIVE_MIXES:
+      return Object.assign({}, state, {
+        user: {
+          ...state.user,
+          Mixes: action.payload
+        }
+      })
+    default:
+      return state
+  }
+}
 //TODO why does this initial state get overwritten?
 const app = (state = {}, action) => {
   switch (action.type) {
     case AppActions.GET_SEARCH_RESULTS:
       return Object.assign({}, state, {
         searchResults: action.payload
-      })
-    case AppActions.RECEIVE_BOOKS:
-      return Object.assign({}, state, {
-        books: action.payload
-      })
-    case AppActions.RECEIVE_MIXES:
-      return Object.assign({}, state, {
-        mixes: action.payload
       })
     case AppActions.RECEIVE_USER:
       return Object.assign({}, state, {
@@ -28,4 +43,4 @@ const app = (state = {}, action) => {
   }
 }
 
-export default app
+export default combineReducers({bookshelf, app})
