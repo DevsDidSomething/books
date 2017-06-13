@@ -101,9 +101,15 @@ export const searchBook = ( searchTerm ) => {
           return b.volumeInfo.imageLinks
         }).map( ( b ) => {
           return {
-            src: b.volumeInfo.imageLinks.smallThumbnail,
+            small_image_src: b.volumeInfo.imageLinks.smallThumbnail,
+            large_image_src: b.volumeInfo.imageLinks.thumbnail,
             google_id: b.id,
-            title: b.volumeInfo.title
+            title: b.volumeInfo.title,
+            subtitle: b.volumeInfo.subtitle,
+            pageCount: b.volumeInfo.pageCount,
+            publishedDate: b.volumeInfo.publishedDate,
+            categories: b.volumeInfo.categories ? b.volumeInfo.categories.join(', ') : '',
+            author: b.volumeInfo.authors ? b.volumeInfo.authors.join(', ') : 'No author'
           }
         })
         dispatch(getSearchResults(results))

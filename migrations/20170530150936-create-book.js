@@ -11,10 +11,25 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
+      subtitle: {
+        type: Sequelize.STRING
+      },
+      pageCount: {
+        type: Sequelize.INTEGER
+      },
       author: {
         type: Sequelize.STRING
       },
-      src: {
+      categories: {
+        type: Sequelize.STRING
+      },
+      publishedDate: {
+        type: Sequelize.STRING
+      },
+      small_image_src: {
+        type: Sequelize.STRING
+      },
+      large_image_src: {
         type: Sequelize.STRING
       },
       google_id: {

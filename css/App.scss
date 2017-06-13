@@ -6,6 +6,7 @@ $lightblue: #4f25d5;
 body {
   margin: 0px;
   font-family: "Courier New", Courier, mono;
+  padding-bottom: 100px;
 }
 h1 {
   font-weight: normal;
@@ -44,7 +45,7 @@ input[type="submit"] {
 
 // Layout
 #root {
-  width: 900px;
+  width: 896px;
   margin: auto;
 }
 
@@ -96,6 +97,7 @@ input[type="submit"] {
   padding: 5px 15px;
   border: 1px solid $blue;
   position: relative;
+  margin-bottom: 35px;
 }
 .mix-title-field, .search-google-field {
   width: 250px;
@@ -118,16 +120,13 @@ input[type="submit"] {
 
 // Book Items
 .book-item {
-  background-size: cover;
+  background-size: 128px;
+  background-repeat: no-repeat;
   display: inline-block;
-  height: 200px;
-  width: 130px;
-  margin: 10px;
+  height: 180px;
+  width: 128px;
   cursor: pointer;
 }
-
-
-
 
 .search-result {
   width: 70px;
@@ -135,10 +134,8 @@ input[type="submit"] {
   background-size: cover;
   display: inline-block;
   cursor: pointer;
+  margin-right: 10px;
 }
-
-
-
 
 .google-preview-container {
   top: 0px;

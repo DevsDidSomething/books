@@ -20,7 +20,7 @@ class Mix extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.mix !== this.props.mix) {
+    if (nextProps.mix.uid !== this.props.mix.uid) {
       this.setState({mode: 'default'})
     }
   }

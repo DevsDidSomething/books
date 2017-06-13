@@ -15,7 +15,7 @@ export default class BookItem extends Component {
     return (
       <div
         className='book-item'
-        style={{ backgroundImage: `url(${this.props.book.src})` }}
+        style={{ backgroundImage: `url(${this.props.book.large_image_src})` }}
         onClick={() => this.props.previewBook(this.props.book.google_id)}>
         {this.props.canEdit &&
           <span

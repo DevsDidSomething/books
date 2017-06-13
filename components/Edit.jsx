@@ -37,11 +37,11 @@ class Edit extends Component {
   renderSearchResults(results) {
     if (results.length) {
       return (
-        <ul>
+        <div className="edit-form-row">
           {results.map(result =>
             <SearchResult key={`r-${result.google_id}`} result={result} onClick={this.addBook} />
           )}
-        </ul>
+        </div>
       )
     }
   }

@@ -58,10 +58,15 @@ router.post('/:mix_uid/books', (req, res) => {
         })
       } else {
         models.Book.create({
+          small_image_src: bookData.small_image_src,
+          large_image_src: bookData.large_image_src,
+          google_id: bookData.google_id,
           title: bookData.title,
-          author: bookData.author,
-          src: bookData.src,
-          google_id: bookData.google_id
+          subtitle: bookData.subtitle,
+          pageCount: bookData.pageCount,
+          publishedDate: bookData.publishedDate,
+          categories: bookData.categories,
+          author: bookData.author
         }).then( (book) => {
           models.Mix.findOne({where: {UserId: req.user.id, name: 'all'}}).then( (mixAll) => {
             book.setMixes([mix, mixAll]).then( () => {
