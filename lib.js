@@ -6,3 +6,7 @@ export const createWebString = (text) => {
   text = encodeURIComponent(text)
   return text
 }
+
+export const randId = () => {
+  return Math.random().toString(36).substr(2, 5)
+}

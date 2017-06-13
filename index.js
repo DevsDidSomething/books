@@ -10,7 +10,7 @@ import bcrypt from 'bcryptjs'
 
 import routes from './routes/index'
 import models from './models/index'
-
+import * as l from './lib'
 
 const app = Express()
 app.use('/static', Express.static('static'))
@@ -67,6 +67,7 @@ app.post('/login',  (req, res, next) => {
         if (err) return res.status(422).send(err)
         bcrypt.hash(req.body.password, salt, (err, hash) => {
           if (err) return res.status(422).send('error hashing')
+          // TODO: user can't have certain usernames, like m or logout or login
           models.User.create({
             username: req.body.username,
             password: hash,
@@ -75,7 +76,9 @@ app.post('/login',  (req, res, next) => {
             if (!user) {
               return res.status(422).send('no user somehow')
             }
+            let uid = l.randId()
             models.Mix.create({
+              uid: uid,
               webstring: 'all',
               name: 'all'
             }).then( (mix) => {

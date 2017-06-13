@@ -45,9 +45,9 @@ function receiveBookshelf(payload) {
   }
 }
 
-export const getBookshelf = (username, mixID) => {
+export const getBookshelf = (username, mixUid) => {
   return ( dispatch, getState ) => {
-    return fetch(`http://localhost:3000/m/${username}/${mixID}`, {
+    return fetch(`http://localhost:3000/m/${username}/${mixUid}`, {
       method: 'GET',
       credentials: 'include'
     })
@@ -113,12 +113,12 @@ function receiveBooks(payload) {
   }
 }
 
-export const addBook = ( book, mixID ) => {
+export const addBook = ( book, mixUid ) => {
   return ( dispatch, getState ) => {
-    return fetch(`/m/${mixID}/books`, {
+    return fetch(`/m/${mixUid}/books`, {
       credentials: 'include',
       method: 'POST',
-      body: JSON.stringify({book: book, mixID: mixID}),
+      body: JSON.stringify({book: book}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -141,9 +141,9 @@ export const addBook = ( book, mixID ) => {
   }
 }
 
-export const deleteBook = ( bookID, mixID ) => {
+export const deleteBook = ( bookID, mixUid ) => {
   return ( dispatch, getState ) => {
-    return fetch(`/m/${mixID}/books/${bookID}`, {
+    return fetch(`/m/${mixUid}/books/${bookID}`, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
@@ -167,9 +167,9 @@ export const deleteBook = ( bookID, mixID ) => {
   }
 }
 
-export const deleteMix = ( mixID ) => {
+export const deleteMix = ( mixUid ) => {
   return ( dispatch, getState ) => {
-    return fetch(`/m/${mixID}`, {
+    return fetch(`/m/${mixUid}`, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
@@ -236,9 +236,9 @@ export const createMix = ( mixName ) => {
   }
 }
 
-export const updateMix = ( mixID, mixName ) => {
+export const updateMix = ( mixUid, mixName ) => {
   return ( dispatch, getState ) => {
-    return fetch(`/m/${mixID}`, {
+    return fetch(`/m/${mixUid}`, {
       credentials: 'include',
       method: 'PUT',
       body: JSON.stringify({name: mixName}),

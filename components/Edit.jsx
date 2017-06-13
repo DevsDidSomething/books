@@ -25,7 +25,7 @@ class Edit extends Component {
   }
 
   addBook(result){
-    this.props.addBook(result, this.props.mix.id)
+    this.props.addBook(result, this.props.mix.uid)
     this.setState({searchTerm: ''})
   }
 
@@ -48,11 +48,11 @@ class Edit extends Component {
 
   updateMix(e){
     e.preventDefault()
-    this.props.updateMix(this.props.mix.id, this.state.mixName)
+    this.props.updateMix(this.props.mix.uid, this.state.mixName)
   }
 
   deleteMix(){
-    this.props.deleteMix(this.props.mix.id)
+    this.props.deleteMix(this.props.mix.uid)
   }
 
   componentWillReceiveProps(nextProps) {

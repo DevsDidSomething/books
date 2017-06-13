@@ -59,14 +59,14 @@ class Books extends Component {
 
   componentWillReceiveProps(nextProps) {
     const params = nextProps.match.params
-    const mixID = parseInt(params.mix_id)
+    const mixUid = params.mix_id
     const username = params.username
     const bookshelf = this.props.bookshelf
     if (_.isEmpty(bookshelf)) {
-      this.props.getBookshelf(username, mixID)
+      this.props.getBookshelf(username, mixUid)
     } else {
-      if ( (bookshelf.user.username !== username) || (bookshelf.mix.id !== mixID)) {
-        this.props.getBookshelf(username, mixID)
+      if ( (bookshelf.user.username !== username) || (bookshelf.mix.uid !== mixUid)) {
+        this.props.getBookshelf(username, mixUid)
       }
     }
   }
@@ -90,6 +90,7 @@ class Books extends Component {
   }
 
   render() {
+    console.log(this.props.bookshelf)
     return (
       <div>
         <div className="nav-container">

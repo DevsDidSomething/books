@@ -14,6 +14,9 @@ module.exports = {
       webstring: {
         type: Sequelize.STRING
       },
+      uid: {
+        type: Sequelize.STRING
+      },
       UserId: {
         type: Sequelize.INTEGER,
         references: {

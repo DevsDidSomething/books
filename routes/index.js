@@ -12,16 +12,16 @@ function requiresLogin( req, res, next ) {
   next()
 }
 
-router.post('/:mix_id/books', requiresLogin)
-router.delete('/:mix_id', requiresLogin)
-router.put('/:mix_id', requiresLogin)
+router.post('/:mix_uid/books', requiresLogin)
+router.delete('/:mix_uid', requiresLogin)
+router.put('/:mix_uid', requiresLogin)
 router.post('/mixes', requiresLogin)
-router.delete('/:mix_id/books/:book_id', requiresLogin)
+router.delete('/:mix_uid/books/:book_id', requiresLogin)
 
 // Get a full bookshelf (initial load)
-router.get('/:username/:mix_id', (req, res) => {
+router.get('/:username/:mix_uid', (req, res) => {
   models.User.findOne({where: {username: req.params.username}, include: [ models.Mix ]}).then( (user) => {
-    models.Mix.findOne({where: {id: req.params.mix_id, UserId: user.id}, include: [ models.Book ]}).then( (mix) => {
+    models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ]}).then( (mix) => {
       let bookshelf = {user: user, mix: mix}
       res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
     })
@@ -29,8 +29,8 @@ router.get('/:username/:mix_id', (req, res) => {
 })
 
 // Save a book
-router.post('/:mix_id/books', (req, res) => {
-  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+router.post('/:mix_uid/books', (req, res) => {
+  models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
       return res.status(403).send('Not authorized to edit this mix')
     }
@@ -67,8 +67,9 @@ router.post('/:mix_id/books', (req, res) => {
   })
 })
 
-router.delete('/:mix_id/books/:book_id', (req, res) => {
-  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+// Delete a Book
+router.delete('/:mix_uid/books/:book_id', (req, res) => {
+  models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
       return res.status(403).send('Not authorized to delete books from this mix')
     }
@@ -90,8 +91,8 @@ router.delete('/:mix_id/books/:book_id', (req, res) => {
 })
 
 // Delete a Mix
-router.delete('/:mix_id', (req, res) => {
-  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+router.delete('/:mix_uid', (req, res) => {
+  models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
       return res.status(403).send('Not authorized to delete this mix')
     }
@@ -108,8 +109,8 @@ router.delete('/:mix_id', (req, res) => {
 })
 
 // Update Mix
-router.put('/:mix_id', (req, res) => {
-  models.Mix.findOne({where: {id: req.params.mix_id}}).then( (mix) => {
+router.put('/:mix_uid', (req, res) => {
+  models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
       return res.status(403).send('Not authorized to delete this mix')
     }
@@ -136,9 +137,11 @@ router.post('/mixes', (req, res) => {
     return res.status(403).send('You cannot give this mix the default name')
   }
   let webstring = l.createWebString(name)
+  let uid = l.randId()
   models.Mix.create({
     name: name,
     webstring: webstring,
+    uid: uid,
     UserId: req.user.id
   }).then( (mix) => {
     // TODO send them to the new mix after this
