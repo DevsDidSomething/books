@@ -56,8 +56,11 @@ class Books extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const params = nextProps.match.params
+    if (params !== this.props.match.params) {
+      this.setState({mode: 'default'})
+    }
     if (!nextProps.app.isFetchingBookshelf) {
-      const params = nextProps.match.params
       const mixUid = params.mix_id || 0
       const username = params.username
       const bookshelf = this.props.bookshelf
@@ -104,12 +107,13 @@ class Books extends Component {
             <div className='mix-item-list'>
               {this.renderMixes(this.props.bookshelf.user)}
               {this.props.bookshelf.user.id === this.props.app.user.id &&
-                <span className='create-mix-button' onClick={this.creatingMixMode}>+ Create new mix</span>
+                <span className='create-mix button' onClick={this.creatingMixMode}>{this.state.mode === 'creatingMix' ? '-Create New Mix' : '+Create New Mix'}</span>
               }
             </div>
             {this.state.mode === 'creatingMix' &&
               <form onSubmit={this.createMix}>
-                <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
+                <input className="mix-title-field" onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a weird title" />
+                <input type="submit" value="Create Mix"/>
               </form>
             }
             <Mix canEdit={this.props.app.user.id === this.props.bookshelf.user.id} mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} deleteBook={this.deleteBook} previewBook={this.previewBook} />

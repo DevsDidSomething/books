@@ -69,7 +69,7 @@ class Edit extends Component {
             Title: <input type="text" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
           </form>
         }
-        <div className='search-book button' onClick={this.addingBookMode}>+ Add a book</div>
+        <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
         {this.state.mode === 'addingBook' &&
           <span>
             <form onSubmit={this.searchBook}>

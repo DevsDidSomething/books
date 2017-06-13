@@ -19,13 +19,19 @@ class Mix extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.mix !== this.props.mix) {
+      this.setState({mode: 'default'})
+    }
+  }
+
   render() {
     return (
       <div>
         <h1 className="mix-title">{this.props.mix.name}</h1>
         {this.props.canEdit &&
           <span>
-            <span className="button" onClick={this.toggleEdit}>Edit</span>
+            <span className="button" onClick={this.toggleEdit}>{this.state.mode === 'editing' ? '-Edit' : '+Edit'}</span>
             {this.state.mode === 'editing' &&
               <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
             }

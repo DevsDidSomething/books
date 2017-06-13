@@ -13,11 +13,33 @@ h1 {
 a {
   text-decoration: none;
 }
-
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
 .button {
   cursor: pointer;
+  margin-left: 10px;
   &:hover {
     text-decoration: underline;
+  }
+}
+input[type="text"] {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+input[type="submit"] {
+  cursor: pointer;
+  border-radius: 0px;
+  background-color: $blue;
+  color: white;
+  border: 0px;
+  padding: 7px 10px;
+  font-size: 14px;
+  &:hover {
+    background-color: lighten($blue, 8%);
   }
 }
 
@@ -58,10 +80,8 @@ a {
   }
 }
 
-.create-mix-button {
-  cursor: pointer;
+.create-mix {
   margin-left: 10px;
-  text-decoration: underline;
 }
 
 // Mix
@@ -74,6 +94,9 @@ a {
   padding: 10px;
   background-color: $blue;
   color: #fff;
+}
+.mix-title-field {
+  width: 250px;
 }
 
 .button.search-book {
@@ -106,9 +129,6 @@ a {
 
 
 
-input {
-  width: 200px;
-}
 
 .google-preview-container {
   top: 0px;
