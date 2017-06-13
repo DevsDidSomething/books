@@ -37,8 +37,6 @@ passport.deserializeUser( (id, done) => {
     })
 })
 
-
-
 passport.use(new LocalStrategy( (username, password, done) => {
   models.User.findOne({where: {username: username }}).then( (user) => {
     if (!user) {

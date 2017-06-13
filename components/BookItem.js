@@ -17,11 +17,13 @@ export default class BookItem extends Component {
         className='book-item'
         style={{ backgroundImage: `url(${this.props.book.src})` }}
         onClick={() => this.props.previewBook(this.props.book.google_id)}>
-        <span
-          className='delete-book'
-          onClick={this.deleteBook}>
-          x
-        </span>
+        {this.props.canEdit &&
+          <span
+            className='delete-book'
+            onClick={this.deleteBook}>
+            x
+          </span>
+        }
       </div>
     )
   }

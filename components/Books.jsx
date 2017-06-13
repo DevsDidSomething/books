@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import BookItem from './BookItem'
 import MixItem from './MixItem'
 import Mix from './Mix'
 import LoginForm from './LoginForm'
@@ -90,7 +89,6 @@ class Books extends Component {
   }
 
   render() {
-    console.log(this.props.bookshelf)
     return (
       <div>
         <div className="nav-container">
@@ -104,21 +102,20 @@ class Books extends Component {
             <LoginForm login={this.props.login} />
           }
         </div>
-        <div className='mix-item-list'>
-          {!_.isEmpty(this.props.bookshelf) &&
-            this.renderMixes(this.props.bookshelf.user)
-          }
-          <span className='create-mix-button' onClick={this.creatingMixMode}>+ Create new mix</span>
-        </div>
-        {this.state.mode === 'creatingMix' &&
-          <form onSubmit={this.createMix}>
-            <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
-          </form>
-        }
         {!_.isEmpty(this.props.bookshelf) &&
           <span>
-            <Mix mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
-            {this.renderBooks(this.props.bookshelf.mix.Books)}
+            <div className='mix-item-list'>
+              {this.renderMixes(this.props.bookshelf.user)}
+              {this.props.bookshelf.user.id === this.props.app.user.id &&
+                <span className='create-mix-button' onClick={this.creatingMixMode}>+ Create new mix</span>
+              }
+            </div>
+            {this.state.mode === 'creatingMix' &&
+              <form onSubmit={this.createMix}>
+                <input onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a good title" />
+              </form>
+            }
+            <Mix canEdit={this.props.app.user.id === this.props.bookshelf.user.id} mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} deleteBook={this.deleteBook} previewBook={this.previewBook} />
           </span>
         }
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>

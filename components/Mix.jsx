@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Edit from './Edit'
+import BookItem from './BookItem'
 
 class Mix extends Component {
   constructor(props){
@@ -22,10 +23,19 @@ class Mix extends Component {
     return (
       <div>
         <h1 className="mix-title">{this.props.mix.name}</h1>
-        <span className="button" onClick={this.toggleEdit}>Edit</span>
-        {this.state.mode === 'editing' &&
-          <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+        {this.props.canEdit &&
+          <span>
+            <span className="button" onClick={this.toggleEdit}>Edit</span>
+            {this.state.mode === 'editing' &&
+              <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+            }
+          </span>
         }
+        <div>
+          {this.props.mix.Books.map(book =>
+            <BookItem key={`b-${book.google_id}`} book={book} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit}/>
+          )}
+        </div>
       </div>
     )
   }
