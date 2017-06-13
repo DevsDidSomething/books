@@ -21,7 +21,6 @@ button:focus {
 }
 .button {
   cursor: pointer;
-  margin-left: 10px;
   &:hover {
     text-decoration: underline;
   }
@@ -80,8 +79,11 @@ input[type="submit"] {
   }
 }
 
-.create-mix {
+.create-mix, .edit-mix {
   margin-left: 10px;
+}
+.edit-form-row {
+  margin: 15px 0px;
 }
 
 // Mix
@@ -91,19 +93,27 @@ input[type="submit"] {
 
 // Editing Mix
 .edit-mix-container {
-  padding: 10px;
-  background-color: $blue;
-  color: #fff;
+  padding: 5px 15px;
+  border: 1px solid $blue;
+  position: relative;
 }
-.mix-title-field {
+.mix-title-field, .search-google-field {
   width: 250px;
-}
-
-.button.search-book {
 }
 
 .button.delete-mix {
   color: #e30e4b;
+}
+.close-form {
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 25px;
+  color: $blue;
+  &:hover {
+    color: lighten($blue, 20%);
+  }
 }
 
 // Book Items

@@ -121,7 +121,7 @@ class Books extends Component {
         }
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
-          <div className='close-preview' onClick={() => this.setState({previewing: false})}>x</div>
+          <div className='close-preview' onClick={() => this.setState({previewing: false})}>&times;</div>
           <div className='google-preview' ref={ (el) => this.googlePreviewContainer = el } />
         </div>
       </div>

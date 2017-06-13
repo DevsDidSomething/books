@@ -65,22 +65,25 @@ class Edit extends Component {
     return (
       <div className='edit-mix-container'>
         {this.props.mix.name !== 'all' &&
-          <form onSubmit={this.updateMix}>
-            Title: <input type="text" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
+          <form className='edit-form-row' onSubmit={this.updateMix}>
+            <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
+            <input type="submit" value="Update Title"/>
           </form>
         }
         <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
         {this.state.mode === 'addingBook' &&
-          <span>
+          <div className='edit-form-row'>
             <form onSubmit={this.searchBook}>
-              <input value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" />
+              <input className="search-google-field" value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" />
+              <input type="submit" value="Search"/>
             </form>
             {this.renderSearchResults(this.props.searchResults)}
-          </span>
+          </div>
         }
         {this.props.mix.name !== 'all' &&
-          <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+          <div className='edit-form-row delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
         }
+        <span className='close-form' onClick={() => this.setState({mode: 'default'})}>&times;</span>
       </div>
     )
   }
