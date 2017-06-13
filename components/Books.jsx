@@ -57,15 +57,17 @@ class Books extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const params = nextProps.match.params
-    const mixUid = params.mix_id
-    const username = params.username
-    const bookshelf = this.props.bookshelf
-    if (_.isEmpty(bookshelf)) {
-      this.props.getBookshelf(username, mixUid)
-    } else {
-      if ( (bookshelf.user.username !== username) || (bookshelf.mix.uid !== mixUid)) {
+    if (!nextProps.app.isFetchingBookshelf) {
+      const params = nextProps.match.params
+      const mixUid = params.mix_id || 0
+      const username = params.username
+      const bookshelf = this.props.bookshelf
+      if (_.isEmpty(bookshelf)) {
         this.props.getBookshelf(username, mixUid)
+      } else {
+        if ( (bookshelf.user.username !== username) || ((mixUid !== 0) && (bookshelf.mix.uid !== mixUid))) {
+          this.props.getBookshelf(username, mixUid)
+        }
       }
     }
   }

@@ -21,10 +21,17 @@ router.delete('/:mix_uid/books/:book_id', requiresLogin)
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
   models.User.findOne({where: {username: req.params.username}, include: [ models.Mix ]}).then( (user) => {
-    models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ]}).then( (mix) => {
-      let bookshelf = {user: user, mix: mix}
-      res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
-    })
+    if ( parseInt(req.params.mix_uid) === 0 ) {
+      models.Mix.findOne({where: {UserId: user.id, name: 'all'}, include: [ models.Book ]}).then( (mixAll) => {
+        let bookshelf = {user: user, mix: mixAll}
+        res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
+      })
+    } else {
+      models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ]}).then( (mix) => {
+        let bookshelf = {user: user, mix: mix}
+        res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
+      })
+    }
   })
 })
 

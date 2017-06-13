@@ -37,6 +37,14 @@ export const login = ( userInfo ) => {
   }
 }
 
+export const IS_FETCHING_BOOKSHELF = `${PREFIX}.IS_FETCHING_BOOKSHELF`;
+function isFetchingBookshelf(payload) {
+  return {
+    type: IS_FETCHING_BOOKSHELF,
+    payload
+  }
+}
+
 export const RECEIVE_BOOKSHELF = `${PREFIX}.RECEIVE_BOOKSHELF`;
 function receiveBookshelf(payload) {
   return {
@@ -47,6 +55,7 @@ function receiveBookshelf(payload) {
 
 export const getBookshelf = (username, mixUid) => {
   return ( dispatch, getState ) => {
+    dispatch(isFetchingBookshelf(true))
     return fetch(`http://localhost:3000/m/${username}/${mixUid}`, {
       method: 'GET',
       credentials: 'include'
@@ -60,6 +69,7 @@ export const getBookshelf = (username, mixUid) => {
     .then( response => response.json() )
     .then( json => {
       dispatch(receiveBookshelf(json.data))
+      dispatch(isFetchingBookshelf(false))
     })
     .catch ( e => {
       console.log(e)
