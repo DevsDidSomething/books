@@ -64,7 +64,7 @@ class Edit extends Component {
   render() {
     return (
       <div className='edit-mix-container'>
-        {this.props.mix.name !== 'all' &&
+        {this.props.mix.name !== 'All' &&
           <form className='edit-form-row' onSubmit={this.updateMix}>
             <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
             <input type="submit" value="Update Title"/>
@@ -80,10 +80,10 @@ class Edit extends Component {
             {this.renderSearchResults(this.props.searchResults)}
           </div>
         }
-        {this.props.mix.name !== 'all' &&
+        {this.props.mix.name !== 'All' &&
           <div className='edit-form-row delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
         }
-        <span className='close-form' onClick={() => this.setState({mode: 'default'})}>&times;</span>
+        <span className='close-form' onClick={this.props.toggleEdit}>&times;</span>
       </div>
     )
   }

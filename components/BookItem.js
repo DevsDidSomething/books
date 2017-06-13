@@ -24,6 +24,11 @@ export default class BookItem extends Component {
             x
           </span>
         }
+        <div className='book-info'>
+          <div className='book-item-title'>{this.props.book.title}</div>
+          <div>by {this.props.book.author}</div>
+          <div className='click-instruction'>Click to open</div>
+        </div>
       </div>
     )
   }

@@ -69,7 +69,7 @@ class Books extends Component {
       } else {
         if ( (bookshelf.user.username !== username) || (bookshelf.mix.uid !== mixUid) ) {
           //this means that we are currently showing the 'all' and should be
-          if (!(bookshelf.mix.name === 'all' && mixUid === 0)) {
+          if (!(bookshelf.mix.name === 'All' && mixUid === 0)) {
             this.props.getBookshelf(username, mixUid)
           }
         }

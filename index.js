@@ -81,8 +81,8 @@ app.post('/login',  (req, res, next) => {
             let uid = l.randId()
             models.Mix.create({
               uid: uid,
-              webstring: 'all',
-              name: 'all'
+              webstring: 'All',
+              name: 'All'
             }).then( (mix) => {
               mix.setUser(user).then( (result) => {
                 req.login(user, (err) => {

@@ -14,6 +14,9 @@ h1 {
 a {
   text-decoration: none;
 }
+div {
+  box-sizing: border-box;
+}
 input:focus,
 select:focus,
 textarea:focus,
@@ -118,23 +121,84 @@ input[type="submit"] {
   }
 }
 
+.book-info {
+  background-color: rgba(20, 62, 136, 0.9);
+  color: #fff;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+
+  .book-item-title {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  .click-instruction {
+    position: absolute;
+    text-align: center;
+  }
+}
+
 // Book Items
 .book-item {
+  position: relative;
   background-size: 128px;
   background-repeat: no-repeat;
   display: inline-block;
   height: 180px;
   width: 128px;
   cursor: pointer;
+
+  .book-info {
+    padding: 10px 5px;
+    height: 180px;
+    width: 128px;
+    font-size: 12px;
+
+    .book-item-title {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .click-instruction {
+      width: 118px;
+      bottom: 10px;
+    }
+  }
+
+  &:hover {
+    .book-info {
+      display: block;
+    }
+  }
 }
 
 .search-result {
-  width: 70px;
-  height: 100px;
-  background-size: cover;
+  position: relative;
+  width: 96px;
+  height: 135px;
+  background-size: 96px;
+  background-repeat: no-repeat;
   display: inline-block;
   cursor: pointer;
-  margin-right: 10px;
+
+  &:hover {
+    .book-info {
+      padding: 5px 3px;
+      width: 96px;
+      height: 135px;
+      font-size: 11px;
+      display: block;
+
+      .book-item-title {
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+      .click-instruction {
+        width: 90px;
+        bottom: 5px;
+      }
+    }
+  }
 }
 
 .google-preview-container {
@@ -160,7 +224,7 @@ input[type="submit"] {
   z-index: 2;
 }
 .preview-background {
-  background-color: rgba(81, 81, 206, 0.2);
+  background-color: rgba(20, 62, 136, 0.9);
   top: 0px;
   left: 0px;
   position: fixed;
@@ -169,8 +233,13 @@ input[type="submit"] {
 }
 .close-preview {
   cursor: pointer;
+  font-size: 35px;
+  color: white;
   position: fixed;
-  top: 100px;
+  top: 75px;
   left: 50%;
-  margin-left: 410px;
+  margin-left: 420px;
+  &:hover {
+    color: lighten($blue, 60%);
+  }
 }

@@ -33,7 +33,7 @@ class Mix extends Component {
           <span>
             <span className="edit-mix button" onClick={this.toggleEdit}>{this.state.mode === 'editing' ? '-Edit' : '+Edit'}</span>
             {this.state.mode === 'editing' &&
-              <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} />
+              <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
             }
           </span>
         }
