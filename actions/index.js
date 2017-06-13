@@ -179,6 +179,7 @@ export const deleteBook = ( bookID, mixUid ) => {
 
 export const deleteMix = ( mixUid ) => {
   return ( dispatch, getState ) => {
+    const currentUsername = getState().app.user.username
     return fetch(`/m/${mixUid}`, {
       credentials: 'include',
       method: 'DELETE',
@@ -195,6 +196,7 @@ export const deleteMix = ( mixUid ) => {
     .then( response => response.json() )
     .then( json => {
       dispatch(receiveMixes(json.data))
+      dispatch(pushToPath(`/${currentUsername}`))
     })
     .catch ( e => {
       console.log(e)
@@ -219,8 +221,17 @@ export const googleHasLoaded = () => {
   }
 }
 
+export const PUSH_TO_PATH = `${PREFIX}.PUSH_TO_PATH`;
+export const pushToPath = (path) => {
+  return {
+    type: PUSH_TO_PATH,
+    payload: path
+  }
+}
+
 export const createMix = ( mixName ) => {
   return ( dispatch, getState ) => {
+    const currentUsername = getState().app.user.username
     return fetch("/m/mixes", {
       credentials: 'include',
       method: 'POST',
@@ -238,6 +249,9 @@ export const createMix = ( mixName ) => {
     .then( response => response.json() )
     .then( json => {
       dispatch(receiveMixes(json.data))
+      const newMix = _.find(json.data, ['name', mixName])
+      const path = `/${currentUsername}/mixes/${newMix.uid}/${newMix.name}`
+      dispatch(pushToPath(path))
     })
     .catch ( e => {
       console.log(e)
