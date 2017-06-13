@@ -64,9 +64,11 @@ class Edit extends Component {
   render() {
     return (
       <div className='edit-mix-container'>
-        <form onSubmit={this.updateMix}>
-          Title: <input type="text" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
-        </form>
+        {this.props.mix.name !== 'all' &&
+          <form onSubmit={this.updateMix}>
+            Title: <input type="text" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
+          </form>
+        }
         <div className='search-book button' onClick={this.addingBookMode}>+ Add a book</div>
         {this.state.mode === 'addingBook' &&
           <span>
@@ -76,7 +78,9 @@ class Edit extends Component {
             {this.renderSearchResults(this.props.searchResults)}
           </span>
         }
-        <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+        {this.props.mix.name !== 'all' &&
+          <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+        }
       </div>
     )
   }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import MixItem from './MixItem'
 import Mix from './Mix'
-import LoginForm from './LoginForm'
 import _ from 'lodash'
 
 class Books extends Component {
@@ -100,17 +99,6 @@ class Books extends Component {
   render() {
     return (
       <div>
-        <div className="nav-container">
-          <h1>
-            Bookshelf
-          </h1>
-          {this.props.app.user &&
-            <a href="/logout">logout</a>
-          }
-          {!this.props.app.user &&
-            <LoginForm login={this.props.login} />
-          }
-        </div>
         {!_.isEmpty(this.props.bookshelf) &&
           <span>
             <div className='mix-item-list'>

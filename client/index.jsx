@@ -5,6 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import App from '../containers/App'
+import Header from '../containers/Header'
 import books from '../reducers'
 import * as AppActions from '../actions'
 require('../css/App.scss')
@@ -23,7 +24,10 @@ google.books.setOnLoadCallback( () => {
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <Route path="/:username/(mixes)?/:mix_id?" component={App}/>
+      <span>
+        <Header />
+        <Route path="/:username/(mixes)?/:mix_id?" component={App}/>
+      </span>
     </BrowserRouter>
   </Provider>,
   el
