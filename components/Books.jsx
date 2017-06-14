@@ -61,7 +61,7 @@ class Books extends Component {
       this.setState({mode: 'default'})
     }
     if (!nextProps.app.isFetchingBookshelf) {
-      const mixUid = params.mix_id || 0
+      const mixUid = params.mix_id || false
       const username = params.username
       const bookshelf = this.props.bookshelf
       if (_.isEmpty(bookshelf)) {
@@ -69,7 +69,7 @@ class Books extends Component {
       } else {
         if ( (bookshelf.user.username !== username) || (bookshelf.mix.uid !== mixUid) ) {
           //this means that we are currently showing the 'all' and should be
-          if (!(bookshelf.mix.name === 'All' && mixUid === 0)) {
+          if (!(bookshelf.mix.name === 'All' && mixUid === false)) {
             this.props.getBookshelf(username, mixUid)
           }
         }
@@ -84,7 +84,7 @@ class Books extends Component {
   previewBook( google_id ) {
     this.setState({previewing: true})
     if ( this.props.app.googleLoaded ) {
-      let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer, {showLinkChrome: false})
+      let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer)
       googlePreview.load( google_id )
     } else {
       console.log('google hasnt loaded')
@@ -105,7 +105,6 @@ class Books extends Component {
         {!_.isEmpty(this.props.bookshelf) &&
           <span>
             <div className='mix-item-list'>
-              {`${this.props.bookshelf.user.username}'s mixes: `}
               {this.renderMixes(this.props.bookshelf.user)}
               {this.props.bookshelf.user.id === this.props.app.user.id &&
                 <span className='create-mix button' onClick={this.creatingMixMode}>{this.state.mode === 'creatingMix' ? '-Create New Mix' : '+Create New Mix'}</span>
@@ -113,7 +112,7 @@ class Books extends Component {
             </div>
             {this.state.mode === 'creatingMix' &&
               <form onSubmit={this.createMix}>
-                <input className="mix-title-field" onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with a weird title" />
+                <input className="mix-title-field" onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with an unusually specific title" />
                 <input type="submit" value="Create Mix"/>
               </form>
             }

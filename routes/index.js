@@ -23,7 +23,7 @@ const publicUserAttributes = ['id', 'username']
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
   models.User.findOne({where: {username: req.params.username}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
-    if ( parseInt(req.params.mix_uid) === 0 ) {
+    if ( req.params.mix_uid === 'false' ) {
       models.Mix.findOne({where: {UserId: user.id, name: 'All'}, include: [ models.Book ]}).then( (mixAll) => {
         let bookshelf = {user: user, mix: mixAll}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
