@@ -8,7 +8,7 @@ export default class BookItem extends Component {
 
   deleteBook(e) {
     e.stopPropagation()
-    this.props.deleteBook(this.props.book.id)
+    this.props.deleteBook(this.props.book.id, this.props.mix.uid)
   }
 
   render() {

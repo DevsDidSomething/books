@@ -10,7 +10,7 @@ function receiveUser(payload) {
   }
 }
 
-export const login = ( userInfo ) => {
+export const login = ( userInfo, fromHomepage ) => {
   return ( dispatch, getState ) => {
     return fetch(`http://localhost:3000/login`, {
       credentials: 'include',
@@ -29,6 +29,9 @@ export const login = ( userInfo ) => {
     .then( response => response.json() )
     .then( json => {
       dispatch(receiveUser(json.data))
+      if (fromHomepage) {
+        dispatch(pushToPath(`/${json.data.username}`))
+      }
     })
     .catch ( e => {
       console.log(e)

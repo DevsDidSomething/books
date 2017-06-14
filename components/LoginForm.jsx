@@ -13,7 +13,10 @@ class LoginForm extends Component {
 
   login(e){
     e.preventDefault()
-    this.props.login({email: this.state.email, username: this.state.username, password: this.state.password})
+    this.props.login(
+      {email: this.state.email, username: this.state.username, password: this.state.password},
+      this.props.fromHomepage
+    )
   }
 
   render(){
