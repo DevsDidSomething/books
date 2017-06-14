@@ -84,7 +84,7 @@ class Books extends Component {
   previewBook( google_id ) {
     this.setState({previewing: true})
     if ( this.props.app.googleLoaded ) {
-      let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer)
+      let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer, {showLinkChrome: false})
       googlePreview.load( google_id )
     } else {
       console.log('google hasnt loaded')

@@ -277,12 +277,20 @@ input[type="submit"] {
 }
 
 .google-preview {
-  margin-top: 100px;
+  margin-top: 60px;
   margin-right: auto;
   margin-left: auto;
   width: 800px;
-  height: 600px;
+  height: 700px;
   z-index: 2;
+
+  > div > div >div:nth-child(2) {
+    display: none;
+  }
+  > div > div:nth-child(2) {
+    display: none;
+  }
+
 }
 .preview-background {
   background-color: rgba(20, 62, 136, 0.9);
@@ -297,7 +305,7 @@ input[type="submit"] {
   font-size: 35px;
   color: white;
   position: fixed;
-  top: 75px;
+  top: 35px;
   left: 50%;
   margin-left: 420px;
   &:hover {
