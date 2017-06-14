@@ -14,21 +14,24 @@ export default class BookItem extends Component {
   render() {
     return (
       <div
-        className='book-item'
+        className={this.props.mode === 'editing' ? 'book-item editing' : 'book-item'}
         style={{ backgroundImage: `url(${this.props.book.large_image_src})` }}
         onClick={() => this.props.previewBook(this.props.book.google_id)}>
-        {this.props.canEdit &&
-          <span
-            className='delete-book'
-            onClick={this.deleteBook}>
-            x
-          </span>
-        }
         <div className='book-info'>
           <div className='book-item-title'>{this.props.book.title}</div>
           <div>by {this.props.book.author}</div>
-          <div className='click-instruction'>Click to open</div>
+          <div className='book-item-instruction'>Click to open</div>
         </div>
+        {this.props.canEdit &&
+          <div className='book-edit-info'>
+            <span
+              className='delete-book'
+              onClick={this.deleteBook}>
+              &times;
+            </span>
+            <div className='book-item-instruction'>Drag to Reorder</div>
+          </div>
+        }
       </div>
     )
   }

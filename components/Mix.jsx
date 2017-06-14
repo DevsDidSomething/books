@@ -42,7 +42,7 @@ class Mix extends Component {
         }
         <div>
           {this.props.mix.Books.map(book =>
-            <BookItem key={`b-${book.google_id}`} book={book} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit}/>
+            <BookItem key={`b-${book.google_id}`} book={book} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit} mode={this.state.mode}/>
           )}
         </div>
       </div>
