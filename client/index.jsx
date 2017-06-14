@@ -12,7 +12,7 @@ require('../css/App.scss')
 let el = document.getElementById('root')
 let user = JSON.parse(el.dataset.user)
 // Create Redux store with initial state
-const store = createStore(books, {app: {searchResults: [], googleLoaded: false, user: user}, bookshelf: {} }, applyMiddleware(thunk))
+const store = createStore(books, {app: {errors: {}, searchResults: [], googleLoaded: false, user: user}, bookshelf: {} }, applyMiddleware(thunk))
 
 // Load google books
 google.books.load()

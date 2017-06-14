@@ -11,6 +11,7 @@ import bcrypt from 'bcryptjs'
 import routes from './routes/index'
 import models from './models/index'
 import * as l from './lib'
+import _ from 'lodash'
 
 const app = Express()
 app.use('/static', Express.static('static'))
@@ -43,9 +44,9 @@ passport.use(new LocalStrategy( (username, password, done) => {
       return done(null, false, { message: 'no user.' })
     }
     bcrypt.compare(password, user.password, (err, res) => {
-      if (err) return done(null, false, err)
+      if (err) return done(null, false, { error: {password: err}})
       if (res === false) {
-        return done(null, false, { message: 'Incorrect password.' })
+        return done(null, false, { error: {password: 'Incorrect password'} })
       } else {
         return done(null, user)
       }
@@ -65,11 +66,39 @@ function userData(user) {
 app.post('/login',  (req, res, next) => {
   models.User.findOne({where: {username: req.body.username }, attributes: ['id', 'username', 'email']}).then( (user) => {
     if (!user) {
-      bcrypt.genSalt(10, (err, salt) => {
-        if (err) return res.status(422).send(err)
-        bcrypt.hash(req.body.password, salt, (err, hash) => {
-          if (err) return res.status(422).send('error hashing')
-          // TODO: user can't have certain usernames, like m or logout or login
+      return res.status(422).send({error: {user: {username: 'No user with that username'}}})
+    } else {
+      passport.authenticate('local', (err, user, info) => {
+        if (err) { return res.status(422).send({error: {user: info.error}}) }
+        if (!user) {
+          return res.status(422).send({error: {user: info.error}})
+        }
+        req.login(user, (err) => {
+          if (err) { return res.status(422).send(err) }
+          return res.json({status: 'success', message: 'Login successful', data: userData(user)});
+        })
+      })(req, res, next)
+    }
+  })
+})
+
+app.post('/signup',  (req, res, next) => {
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) return res.status(422).send(err)
+    bcrypt.hash(req.body.password, salt, (err, hash) => {
+      if (err) return res.status(422).send('error hashing')
+      let errors = l.validateFields(req.body, {requireEmail: true})
+      if (!_.isEmpty(errors)) {
+        return res.status(422).send({error: {user: errors}})
+      }
+      models.User.findOne({where: {username: req.body.username }}).then( (existingUsername) => {
+        if (existingUsername){
+          return res.status(422).send({error: {user: {username: 'Username is taken'}}})
+        }
+        models.User.findOne({where: {email: req.body.email }}).then( (existingEmail) => {
+          if (existingEmail){
+            return res.status(422).send({error: {user: {email: 'Email is taken'}}})
+          }
           models.User.create({
             username: req.body.username,
             password: hash,
@@ -94,20 +123,10 @@ app.post('/login',  (req, res, next) => {
           })
         })
       })
-    } else {
-      passport.authenticate('local', (err, user, info) => {
-        if (err) { return res.status(422).send(err) }
-        if (!user) {
-          return res.status(422).send(info.message)
-        }
-        req.login(user, (err) => {
-          if (err) { return res.status(422).send(err) }
-          return res.json({status: 'success', message: 'Login successful', data: userData(user)});
-        })
-      })(req, res, next)
-    }
+    })
   })
 })
+
 app.use('/m', routes)
 
 app.get('*', (req, res) => {

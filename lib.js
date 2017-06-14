@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const createWebString = (text) => {
   if (text.length > 50) {
     text = text.substring(0,50)
@@ -9,4 +11,35 @@ export const createWebString = (text) => {
 
 export const randId = () => {
   return Math.random().toString(36).substr(2, 5)
+}
+
+export const validateFields = (f, options={}) => {
+  let errors = {}
+
+  if (_.isEmpty(f.username)){
+    errors['username'] = "Username can't be blank"
+  } else if (f.username.match(/\W/g)){
+    errors['username'] = "Username cannot have special characters"
+  } else if (f.username.length < 3) {
+    errors['username'] = "Please use at least 3 letters"
+  } else if (f.username === 'login' || f.username === 'logout' || f.username === 'signup' || f.username === 'static') {
+    errors['username'] = "I see what you're doing but please don't"
+  }
+
+  if (_.isEmpty(f.password)){
+    errors['password'] = "Password can't be blank"
+  } else if (f.password.length < 6) {
+    errors['password'] = "Please use at least 6 characters"
+  }
+
+  if (options.requireEmail) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if (_.isEmpty(f.email)){
+      errors['email'] = "Email can't be blank"
+    } else if (!f.email.match(re)){
+      errors['email'] = "Not a valid email"
+    }
+  }
+
+  return errors
 }

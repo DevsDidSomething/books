@@ -5,7 +5,7 @@ import LoginForm from '../components/LoginForm'
 import { bindActionCreators } from 'redux'
 import * as AppActions from '../actions'
 
-let Header = ({ user, fromHomepage, login }) => (
+let Header = ({ user, fromHomepage, errors, login }) => (
   <div className="nav-container">
     <h1 className="site-title">
       <Link to='/'>
@@ -21,7 +21,7 @@ let Header = ({ user, fromHomepage, login }) => (
     }
     {!user &&
       <div className='user-actions-container'>
-        <LoginForm login={login} fromHomepage={fromHomepage}/>
+        <LoginForm login={login} fromHomepage={fromHomepage} errors={errors}/>
       </div>
     }
   </div>
@@ -29,7 +29,8 @@ let Header = ({ user, fromHomepage, login }) => (
 
 const mapStateToProps = (state, ownProps) => ({
   user: state.app.user,
-  fromHomepage: ownProps.params.username ? false : true
+  fromHomepage: ownProps.params.username ? false : true,
+  errors: state.app.errors.user
 })
 
 const mapDispatchToProps = ({

@@ -10,9 +10,17 @@ function receiveUser(payload) {
   }
 }
 
-export const login = ( userInfo, fromHomepage ) => {
+export const RECEIVE_ERROR = `${PREFIX}.RECEIVE_ERROR`;
+function receiveError(payload) {
+  return {
+    type: RECEIVE_ERROR,
+    payload
+  }
+}
+
+export const login = ( userInfo, mode, fromHomepage ) => {
   return ( dispatch, getState ) => {
-    return fetch(`http://localhost:3000/login`, {
+    return fetch(`http://localhost:3000/${mode}`, {
       credentials: 'include',
       method: 'POST',
       body: JSON.stringify(userInfo),
@@ -20,22 +28,16 @@ export const login = ( userInfo, fromHomepage ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveUser(json.data))
-      if (fromHomepage) {
-        dispatch(pushToPath(`/${json.data.username}`))
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveUser(json.data))
+        if (fromHomepage) {
+          dispatch(pushToPath(`/${json.data.username}`))
+        }
       }
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
     })
   }
 }
@@ -63,20 +65,14 @@ export const getBookshelf = (username, mixUid) => {
       method: 'GET',
       credentials: 'include'
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveBookshelf(json.data))
-      dispatch(isFetchingBookshelf(false))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveBookshelf(json.data))
+        dispatch(isFetchingBookshelf(false))
+      }
     })
   }
 }
@@ -142,20 +138,14 @@ export const addBook = ( book, mixUid ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveBooks(json.data))
-      dispatch(getSearchResults([]))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveBooks(json.data))
+        dispatch(getSearchResults([]))
+      }
     })
   }
 }
@@ -169,19 +159,13 @@ export const deleteBook = ( bookID, mixUid ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveBooks(json.data))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveBooks(json.data))
+      }
     })
   }
 }
@@ -196,20 +180,14 @@ export const deleteMix = ( mixUid ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveMixes(json.data))
-      dispatch(pushToPath(`/${currentUsername}`))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveMixes(json.data))
+        dispatch(pushToPath(`/${currentUsername}`))
+      }
     })
   }
 }
@@ -249,22 +227,16 @@ export const createMix = ( mixName ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveMixes(json.data))
-      const newMix = _.find(json.data, ['name', mixName])
-      const path = `/${currentUsername}/mixes/${newMix.uid}/${newMix.webstring}`
-      dispatch(pushToPath(path))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveMixes(json.data))
+        const newMix = _.find(json.data, ['name', mixName])
+        const path = `/${currentUsername}/mixes/${newMix.uid}/${newMix.webstring}`
+        dispatch(pushToPath(path))
+      }
     })
   }
 }
@@ -279,19 +251,13 @@ export const updateMix = ( mixUid, mixName ) => {
         "Content-Type": "application/json"
       }
     })
-    .then( response => {
-      if ( !response.ok ) {
-        throw new Error(response.statusText)
-      }
-      return response
-    })
     .then( response => response.json() )
     .then( json => {
-      dispatch(receiveMixes(json.data))
-    })
-    .catch ( e => {
-      console.log(e)
-      //TODO catch error
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveMixes(json.data))
+      }
     })
   }
 }

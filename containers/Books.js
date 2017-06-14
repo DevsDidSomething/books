@@ -15,13 +15,10 @@ class Books extends Component {
       const bookshelf = this.props.bookshelf
       if (_.isEmpty(bookshelf)) {
         this.props.getBookshelf(username, mixUid)
-      } else {
-        if ( (bookshelf.user.username !== username) || (bookshelf.mix.uid !== mixUid) ) {
-          //this means that we are currently showing the 'all' and should be
-          if (!(bookshelf.mix.name === 'All' && mixUid === false)) {
-            this.props.getBookshelf(username, mixUid)
-          }
-        }
+      } else if (bookshelf.user.username !== username) {
+        this.props.getBookshelf(username, mixUid)
+      } else if ((bookshelf.mix.uid !== mixUid) && !(bookshelf.mix.name === 'All' && mixUid === false)){
+        this.props.getBookshelf(username, mixUid)
       }
     }
   }

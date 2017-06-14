@@ -26,6 +26,13 @@ const bookshelf = (state = {}, action) => {
 //TODO why does this initial state get overwritten?
 const app = (state = {}, action) => {
   switch (action.type) {
+    case AppActions.RECEIVE_ERROR:
+      return Object.assign({}, state, {
+        errors: {
+          ...state.errors,
+          ...action.payload
+        }
+      })
     case AppActions.IS_FETCHING_BOOKSHELF:
       return Object.assign({}, state, {
         isFetchingBookshelf: action.payload
