@@ -259,7 +259,7 @@ export const createMix = ( mixName ) => {
     .then( json => {
       dispatch(receiveMixes(json.data))
       const newMix = _.find(json.data, ['name', mixName])
-      const path = `/${currentUsername}/mixes/${newMix.uid}/${newMix.name}`
+      const path = `/${currentUsername}/mixes/${newMix.uid}/${newMix.webstring}`
       dispatch(pushToPath(path))
     })
     .catch ( e => {

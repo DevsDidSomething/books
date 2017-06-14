@@ -9,9 +9,6 @@ class Books extends Component {
 
   componentWillReceiveProps(nextProps) {
     const params = nextProps.params
-    // if (params !== this.props.params) {
-    //   this.setState({mode: 'default'})
-    // }
     if (!nextProps.app.isFetchingBookshelf) {
       const mixUid = params.mix_id || false
       const username = params.username
@@ -27,6 +24,12 @@ class Books extends Component {
         }
       }
     }
+  }
+
+  componentWillMount(){
+    const mixUid = this.props.params.mix_id || false
+    const username = this.props.params.username
+    this.props.getBookshelf(username, mixUid)
   }
 
   render(){
