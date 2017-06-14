@@ -70,7 +70,9 @@ class Edit extends Component {
             <input type="submit" value="Update Title"/>
           </form>
         }
-        <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
+        <div className='edit-form-row'>
+          <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
+        </div>
         {this.state.mode === 'addingBook' &&
           <div className='edit-form-row'>
             <form onSubmit={this.searchBook}>
@@ -81,7 +83,9 @@ class Edit extends Component {
           </div>
         }
         {this.props.mix.name !== 'All' &&
-          <div className='edit-form-row delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+          <div className='edit-form-row'>
+            <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+          </div>
         }
         <span className='close-form' onClick={this.props.toggleEdit}>&times;</span>
       </div>

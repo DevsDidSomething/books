@@ -56,9 +56,28 @@ input[type="submit"] {
 .nav-container {
   color: $blue;
   border-bottom: 2px solid $blue;
+  padding: 20px 0px;
+}
+
+.user-actions-container {
+  float: right;
+  line-height: 2em;
+}
+
+.site-title {
+  margin: 0px;
+  display: inline-block;
+}
+
+
+.logout {
+  // float: right;
 }
 
 // Mix items
+.search-book, .delete-mix {
+  display: inline-block;
+}
 .mix-item-list {
   padding: 20px 0px;
 }
@@ -91,8 +110,12 @@ input[type="submit"] {
 }
 
 // Mix
-.mix-title {
-  display: inline-block;
+.mix-title-container {
+  text-align: center;
+
+  h1 {
+    display: inline-block;
+  }
 }
 
 // Editing Mix

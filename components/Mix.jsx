@@ -28,14 +28,17 @@ class Mix extends Component {
   render() {
     return (
       <div>
-        <h1 className="mix-title">{this.props.mix.name}</h1>
-        {this.props.canEdit &&
-          <span>
-            <span className="edit-mix button" onClick={this.toggleEdit}>{this.state.mode === 'editing' ? '-Edit' : '+Edit'}</span>
-            {this.state.mode === 'editing' &&
-              <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
-            }
-          </span>
+        <div className="mix-title-container">
+          <h1 className="mix-title">{this.props.mix.name}</h1>
+          {this.props.canEdit &&
+            <span className="edit-mix button" onClick={this.toggleEdit}>
+              {this.state.mode === 'editing' ? '-Edit' : '+Edit'}
+            </span>
+          }
+        </div>
+
+        {this.props.canEdit && this.state.mode === 'editing' &&
+          <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
         }
         <div>
           {this.props.mix.Books.map(book =>

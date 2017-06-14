@@ -105,6 +105,7 @@ class Books extends Component {
         {!_.isEmpty(this.props.bookshelf) &&
           <span>
             <div className='mix-item-list'>
+              {`${this.props.bookshelf.user.username}'s mixes: `}
               {this.renderMixes(this.props.bookshelf.user)}
               {this.props.bookshelf.user.id === this.props.app.user.id &&
                 <span className='create-mix button' onClick={this.creatingMixMode}>{this.state.mode === 'creatingMix' ? '-Create New Mix' : '+Create New Mix'}</span>
