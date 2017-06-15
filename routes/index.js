@@ -1,7 +1,7 @@
-import models from '../models/index'
-import Express from 'express'
-import * as l from '../lib'
-import _ from 'lodash'
+const models = require( '../models/index' )
+const Express = require( 'express' )
+const l = require( '../lib' )
+const _ = require( 'lodash' )
 
 let router  = Express.Router()
 

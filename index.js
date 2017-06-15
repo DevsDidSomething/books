@@ -1,17 +1,17 @@
-import path from 'path'
-import fs from 'fs'
-import Express from 'express'
-import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
-import session from 'express-session'
-import passport from 'passport'
-import LocalStrategy from 'passport-local'
-import bcrypt from 'bcryptjs'
+const path = require('path')
+const fs = require( 'fs')
+const Express = require( 'express')
+const bodyParser = require( 'body-parser')
+const cookieParser = require( 'cookie-parser')
+const session = require( 'express-session')
+const passport = require( 'passport')
+const LocalStrategy = require( 'passport-local')
+const bcrypt = require( 'bcryptjs')
 
-import routes from './routes/index'
-import models from './models/index'
-import * as l from './lib'
-import _ from 'lodash'
+const routes = require( './routes/index')
+const models = require( './models/index')
+const l = require( './lib')
+const _ = require( 'lodash')
 
 const app = Express()
 app.use('/static', Express.static('static'))

@@ -1,6 +1,6 @@
-import _ from 'lodash'
+const _ = require( 'lodash' )
 
-export const createWebString = (text) => {
+const createWebString = (text) => {
   if (text.length > 50) {
     text = text.substring(0,50)
   }
@@ -9,11 +9,11 @@ export const createWebString = (text) => {
   return text
 }
 
-export const randId = () => {
+const randId = () => {
   return Math.random().toString(36).substr(2, 5)
 }
 
-export const validateFields = (f, options={}) => {
+const validateFields = (f, options={}) => {
   let errors = {}
 
   if (_.isEmpty(f.username)){
@@ -42,4 +42,10 @@ export const validateFields = (f, options={}) => {
   }
 
   return errors
+}
+
+module.exports = {
+  createWebString: createWebString,
+  randId: randId,
+  validateFields: validateFields
 }
