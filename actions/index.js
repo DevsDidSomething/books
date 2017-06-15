@@ -20,7 +20,7 @@ function receiveError(payload) {
 
 export const login = ( userInfo, mode, fromHomepage ) => {
   return ( dispatch, getState ) => {
-    return fetch(`http://localhost:3000/${mode}`, {
+    return fetch(`/${mode}`, {
       credentials: 'include',
       method: 'POST',
       body: JSON.stringify(userInfo),
@@ -61,7 +61,7 @@ function receiveBookshelf(payload) {
 export const getBookshelf = (username, mixUid) => {
   return ( dispatch, getState ) => {
     dispatch(isFetchingBookshelf(true))
-    return fetch(`http://localhost:3000/m/${username}/${mixUid}`, {
+    return fetch(`/m/${username}/${mixUid}`, {
       method: 'GET',
       credentials: 'include'
     })
