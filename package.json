@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Book mixtapes",
   "main": "index.js",
+  "engines" : { "node" : "6.11.0" },
   "scripts": {
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack -d --watch",
