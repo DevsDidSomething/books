@@ -15,6 +15,7 @@ const _ = require( 'lodash')
 
 const app = Express()
 app.use('/static', Express.static('static'))
+app.use(Express.static('client/public'))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(cookieSession({ secret: 'alien coffee', resave: true, saveUninitialized: true }))
@@ -129,7 +130,7 @@ app.post('/signup',  (req, res, next) => {
 app.use('/m', routes)
 
 app.get('*', (req, res) => {
-  fs.readFile(path.join(__dirname+'/client/public/index.html'), 'utf8', (err, htmlData)=>{
+  fs.readFile(path.join(__dirname+'/client/index.html'), 'utf8', (err, htmlData)=>{
     if (err) {
       console.error('read err', err)
       return res.status(404).end()
