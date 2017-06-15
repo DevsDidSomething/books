@@ -33,7 +33,7 @@ class Books extends Component {
     return(
       <span>
         {!_.isEmpty(this.props.bookshelf) &&
-          <Bookshelf params={this.props.params} bookshelf={this.props.bookshelf} app={this.props.app} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} createMix={this.props.createMix} updateMix={this.props.updateMix} deleteBook={this.props.deleteBook} updateMixOrder={this.props.updateMixOrder}/>
+          <Bookshelf params={this.props.params} bookshelf={this.props.bookshelf} app={this.props.app} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} createMix={this.props.createMix} updateMix={this.props.updateMix} deleteBook={this.props.deleteBook} updateMixOrder={this.props.updateMixOrder} />
         }
       </span>
     )

@@ -7,7 +7,7 @@ let router  = Express.Router()
 
 function requiresLogin( req, res, next ) {
   if (!req.isAuthenticated()) {
-    return res.status(403).send('You must be logged in')
+    return res.status(403).send({error: {app: 'You must be logged in'}})
   }
   next()
 }
@@ -42,7 +42,10 @@ router.get('/:username/:mix_uid', (req, res) => {
 router.post('/:mix_uid/books', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
-      return res.status(403).send('Not authorized to edit this mix')
+      return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to edit this mix'}}})
+    }
+    if (mix.name === 'All') {
+      return res.status(403).send({error: {bookshelf: {edit: 'You cannot edit the All mix'}}})
     }
     mix.countBooks().then( (mixBooksCount) => {
       let bookData = req.body.book
@@ -102,7 +105,7 @@ router.post('/:mix_uid/books', (req, res) => {
 router.delete('/:mix_uid/books/:book_id', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
-      return res.status(403).send('Not authorized to delete books from this mix')
+      return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to delete books from this mix'}}})
     }
     models.Book.findOne({where: {id: req.params.book_id}, include: [models.Mix]}).then( (book) => {
       book.getMixes().then( (bookMixes) => {
@@ -131,10 +134,10 @@ router.delete('/:mix_uid/books/:book_id', (req, res) => {
 router.delete('/:mix_uid', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
-      return res.status(403).send('Not authorized to delete this mix')
+      return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to delete this mix'}}})
     }
     if (mix.name === 'All') {
-      return res.status(403).send('You cannot delete the default mix')
+      return res.status(403).send({error: {bookshelf: {edit: 'You cannot delete the default mix'}}})
     }
     mix.destroy().then( () => {
       // TODO send them to 'all' after this
@@ -149,7 +152,7 @@ router.delete('/:mix_uid', (req, res) => {
 router.post('/:mix_uid/order', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
-      return res.status(403).send('Not authorized to edit this mix')
+      return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to edit this mix'}}})
     }
     let order = req.body.order
     mix.getBooks().then( (books) => {
@@ -168,11 +171,11 @@ router.post('/:mix_uid/order', (req, res) => {
 router.put('/:mix_uid', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
     if (mix.UserId !== req.user.id) {
-      return res.status(403).send('Not authorized to delete this mix')
+      return res.status(403).send({error: {mix: {edit: 'Not authorized to delete this mix'}}})
     }
     let name = req.body.name
     if (name === 'All'){
-      return res.status(403).send('You cannot give this mix the default name')
+      return res.status(403).send({error: {mix: {edit: 'You cannot give this mix the default name'}}})
     }
     let webstring = l.createWebString(name)
     mix.update({
@@ -190,7 +193,7 @@ router.put('/:mix_uid', (req, res) => {
 router.post('/mixes', (req, res) => {
   let name = req.body.name
   if (name === 'All'){
-    return res.status(403).send('You cannot give this mix the default name')
+    return res.status(403).send({error: {mix: {edit: 'You cannot give this mix the default name'}}})
   }
   let webstring = l.createWebString(name)
   let uid = l.randId()

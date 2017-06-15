@@ -51,6 +51,10 @@ class Mix extends Component {
   }
 
   render() {
+    let editErrors = null
+    if (this.props.errors && this.props.errors.bookshelf && this.props.errors.bookshelf.edit) {
+      editErrors = this.props.errors.bookshelf.edit
+    }
     return (
       <div>
         <div className="mix-title-container">
@@ -63,7 +67,7 @@ class Mix extends Component {
         </div>
 
         {this.props.canEdit && this.state.mode === 'editing' &&
-          <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
+          <Edit errors={editErrors} mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
         }
         <div ref={(el) => {this.bookList = el}}>
           {this.props.mix.Books.map(book =>

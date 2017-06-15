@@ -64,6 +64,9 @@ class Edit extends Component {
   render() {
     return (
       <div className='edit-mix-container'>
+        {this.props.errors &&
+          <div className="form-error">{this.props.errors}</div>
+        }
         {this.props.mix.name !== 'All' &&
           <form className='edit-form-row' onSubmit={this.updateMix}>
             <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
