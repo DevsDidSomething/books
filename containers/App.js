@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Books from './Books'
 import Header from './Header'
+import Home from './Home'
 import { bindActionCreators } from 'redux'
 import * as AppActions from '../actions'
 
@@ -16,9 +17,12 @@ class App extends Component {
   render(){
     return(
       <span>
-        <Header params={this.props.match.params} />
+        <Header params={this.props.match.params}  />
         {this.props.match.params.username &&
           <Books params={this.props.match.params} />
+        }
+        {!this.props.match.params.username &&
+          <Home />
         }
       </span>
     )

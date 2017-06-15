@@ -22,6 +22,13 @@ router.delete('/:mix_uid/books/:book_id', requiresLogin)
 const publicUserAttributes = ['id', 'username']
 
 // Get a full bookshelf (initial load)
+router.get('/allmixes', (req, res) => {
+  models.Mix.findAll({where: {name: {not: 'All'}}, include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
+    res.json({status: 'success', message: 'Retrieved all mixes', data: mixes})
+  })
+})
+
+// Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
   models.User.findOne({where: {username: req.params.username}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
     if ( req.params.mix_uid === 'false' ) {

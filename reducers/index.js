@@ -33,6 +33,10 @@ const app = (state = {}, action) => {
           ...action.payload
         }
       })
+    case AppActions.RECEIVE_ALL_MIXES:
+      return Object.assign({}, state, {
+        allMixes: action.payload
+      })
     case AppActions.IS_FETCHING_BOOKSHELF:
       return Object.assign({}, state, {
         isFetchingBookshelf: action.payload

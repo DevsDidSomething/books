@@ -77,6 +77,31 @@ export const getBookshelf = (username, mixUid) => {
   }
 }
 
+export const RECEIVE_ALL_MIXES = `${PREFIX}.RECEIVE_ALL_MIXES`;
+function receiveAllMixes(payload) {
+  return {
+    type: RECEIVE_ALL_MIXES,
+    payload
+  }
+}
+
+export const getAllMixes = () => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/allmixes`, {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then( response => response.json() )
+    .then( json => {
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveAllMixes(json.data))
+      }
+    })
+  }
+}
+
 export const GET_SEARCH_RESULTS = `${PREFIX}.GET_SEARCH_RESULTS`;
 function getSearchResults(payload) {
   return {
