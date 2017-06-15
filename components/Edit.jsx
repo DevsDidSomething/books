@@ -79,8 +79,8 @@ class Edit extends Component {
         {this.state.mode === 'addingBook' &&
           <div className='edit-form-row'>
             <form onSubmit={this.searchBook}>
-              <input className="search-google-field" value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" />
-              <input type="submit" value="Search"/>
+              <input className="search-google-field" value={this.state.searchTerm} onChange={(e) => this.setState({searchTerm: e.target.value})} type="text" placeholder="Seach by title, author, or keyword" disabled={this.props.isSearching ? true : false}/>
+              <input type="submit" value="Search" disabled={this.props.isSearching ? true : false}/>
             </form>
             {this.renderSearchResults(this.props.searchResults)}
           </div>

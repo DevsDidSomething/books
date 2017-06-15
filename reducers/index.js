@@ -37,13 +37,18 @@ const app = (state = {}, action) => {
       return Object.assign({}, state, {
         isFetchingBookshelf: action.payload
       })
+    case AppActions.IS_SEARCHING:
+      return Object.assign({}, state, {
+        isSearching: action.payload
+      })
     case AppActions.PUSH_TO_PATH:
       return Object.assign({}, state, {
         pushedPath: action.payload
       })
     case AppActions.GET_SEARCH_RESULTS:
       return Object.assign({}, state, {
-        searchResults: action.payload
+        searchResults: action.payload,
+        isSearching: false
       })
     case AppActions.RECEIVE_USER:
       return Object.assign({}, state, {

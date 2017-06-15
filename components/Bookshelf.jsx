@@ -75,7 +75,7 @@ class Books extends Component {
             <input type="submit" value="Create Mix"/>
           </form>
         }
-        <Mix errors={this.props.app.errors} canEdit={this.props.app.user.id === this.props.bookshelf.user.id} mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} deleteBook={this.props.deleteBook} previewBook={this.previewBook} updateMixOrder={this.props.updateMixOrder} />
+        <Mix errors={this.props.app.errors} canEdit={(this.props.app.user.id === this.props.bookshelf.user.id) && (this.props.bookshelf.mix.name !== 'All')} mix={this.props.bookshelf.mix} searchResults={this.props.app.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} deleteBook={this.props.deleteBook} previewBook={this.previewBook} updateMixOrder={this.props.updateMixOrder} isSearching={this.props.app.isSearching} />
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
           <div className='close-preview' onClick={() => this.setState({previewing: false})}>&times;</div>

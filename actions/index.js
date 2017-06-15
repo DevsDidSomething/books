@@ -43,7 +43,7 @@ export const login = ( userInfo, mode, fromHomepage ) => {
 }
 
 export const IS_FETCHING_BOOKSHELF = `${PREFIX}.IS_FETCHING_BOOKSHELF`;
-function isFetchingBookshelf(payload) {
+function setFetchingBookshelf(payload) {
   return {
     type: IS_FETCHING_BOOKSHELF,
     payload
@@ -60,7 +60,7 @@ function receiveBookshelf(payload) {
 
 export const getBookshelf = (username, mixUid) => {
   return ( dispatch, getState ) => {
-    dispatch(isFetchingBookshelf(true))
+    dispatch(setFetchingBookshelf(true))
     return fetch(`/m/${username}/${mixUid}`, {
       method: 'GET',
       credentials: 'include'
@@ -71,7 +71,7 @@ export const getBookshelf = (username, mixUid) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveBookshelf(json.data))
-        dispatch(isFetchingBookshelf(false))
+        dispatch(setFetchingBookshelf(false))
       }
     })
   }
@@ -85,8 +85,17 @@ function getSearchResults(payload) {
   }
 }
 
+export const IS_SEARCHING = `${PREFIX}.IS_SEARCHING`;
+function setSearching(payload) {
+  return {
+    type: IS_SEARCHING,
+    payload
+  }
+}
+
 export const searchBook = ( searchTerm ) => {
   return ( dispatch, getState ) => {
+    dispatch(setSearching(true))
     return fetch( `https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTerm}`, {} )
       .then( response => {
         if ( !response.ok ) {
