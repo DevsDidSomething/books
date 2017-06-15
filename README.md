@@ -1,4 +1,4 @@
-$ npm start:dev
+$ npm run start:dev
 
 to run an interactive session
 $ node console.js

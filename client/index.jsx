@@ -9,6 +9,9 @@ import books from '../reducers'
 import * as AppActions from '../actions'
 require('../css/App.scss')
 
+import airbrakeJs from 'airbrake-js'
+let airbrake = new airbrakeJs({projectId: 146652, projectKey: '992e6e0fafe049bac6a53075269386f8'})
+
 let el = document.getElementById('root')
 let user = JSON.parse(el.dataset.user)
 // Create Redux store with initial state
