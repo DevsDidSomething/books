@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import Edit from './Edit'
 import BookItem from './BookItem'
+import Sortable from 'sortablejs'
 
 class Mix extends Component {
   constructor(props){
     super(props)
     this.toggleEdit = this.toggleEdit.bind(this)
+    this.updateListOrder = this.updateListOrder.bind(this)
     this.state = {
       mode: 'default'
     }
@@ -25,6 +27,32 @@ class Mix extends Component {
     }
   }
 
+  updateListOrder(){
+    let newOrder = this.sortableList.toArray()
+    this.props.updateMixOrder(this.props.mix.uid, newOrder)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.bookList && this.sortableList) {
+      const bookIDs = this.props.mix.Books.map((b) => b.id.toString())
+      if (!_.isEqual(bookIDs, this.sortableList.toArray())) {
+        this.sortableList.sort(bookIDs)
+      }
+    }
+  }
+
+  componentDidUpdate(){
+    if (this.bookList && this.props.canEdit) {
+      if (this.sortableList){
+        const bookIDs = this.props.mix.Books.map((b) => b.id.toString())
+      }
+      if (!this.sortableList) {
+        this.sortableList = Sortable.create(this.bookList, {onSort: this.updateListOrder})
+      }
+      this.sortableList.option("disabled", this.state.mode === 'default')
+    }
+  }
+
   render() {
     return (
       <div>
@@ -40,7 +68,7 @@ class Mix extends Component {
         {this.props.canEdit && this.state.mode === 'editing' &&
           <Edit mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} />
         }
-        <div>
+        <div ref={(el) => {this.bookList = el}}>
           {this.props.mix.Books.map(book =>
             <BookItem key={`b-${book.google_id}`} book={book} mix={this.props.mix} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit} mode={this.state.mode}/>
           )}

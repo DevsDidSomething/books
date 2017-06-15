@@ -14,6 +14,7 @@ export default class BookItem extends Component {
   render() {
     return (
       <div
+        data-id={this.props.book.id}
         className={this.props.mode === 'editing' ? 'book-item editing' : 'book-item'}
         style={{ backgroundImage: `url(${this.props.book.large_image_src})` }}
         onClick={() => this.props.previewBook(this.props.book.google_id)}>

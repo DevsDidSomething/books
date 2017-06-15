@@ -241,6 +241,27 @@ export const createMix = ( mixName ) => {
   }
 }
 
+export const updateMixOrder = ( mixUid, bookOrder ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/${mixUid}/order`, {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({order: bookOrder}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => response.json() )
+    .then( json => {
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveBooks(json.data))
+      }
+    })
+  }
+}
+
 export const updateMix = ( mixUid, mixName ) => {
   return ( dispatch, getState ) => {
     return fetch(`/m/${mixUid}`, {
