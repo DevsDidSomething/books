@@ -117,11 +117,18 @@ router.delete('/:mix_uid/books/:book_id', (req, res) => {
     models.Book.findOne({where: {id: req.params.book_id}, include: [models.Mix]}).then( (book) => {
       book.getMixes().then( (bookMixes) => {
         const bookIndex = _.find(bookMixes, ['id', mix.id]).BookMix.order
+        const userBookMixes = _.filter(bookMixes, (m) => {
+          return (m.UserId === mix.UserId && ((m.id !== mix.id) && (m.name !== 'All')))
+        })
+        if (userBookMixes.length === 0) {
+          _.remove(bookMixes, {
+            name: 'All',
+            UserId: mix.UserId
+          })
+        }
         _.remove(bookMixes, {
           id: mix.id
         })
-        // TODO see if it belongs to any of the users other mixes besides all
-        // if not, delete it from both this mix and all
         book.setMixes(bookMixes).then( (result) => {
           mix.getBooks().then( (books) => {
             books.forEach( (b) => {
