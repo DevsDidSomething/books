@@ -3,6 +3,9 @@ $blue: #18348a;
 $lightblue: #4f25d5;
 $red: #ff0049;
 // Basic styles
+html {
+  min-height: 101%;
+}
 body {
   margin: 0px;
   font-family: "Courier New", Courier, mono;
@@ -136,7 +139,7 @@ input[type="submit"] {
 
 // Mix
 .mix-title-container {
-  text-align: center;
+  // text-align: center;
 
   h1 {
     display: inline-block;

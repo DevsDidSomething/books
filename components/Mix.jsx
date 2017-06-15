@@ -21,18 +21,15 @@ class Mix extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.mix.uid !== this.props.mix.uid) {
-      this.setState({mode: 'default'})
-    }
-  }
-
   updateListOrder(){
     let newOrder = this.sortableList.toArray()
     this.props.updateMixOrder(this.props.mix.uid, newOrder)
   }
 
   componentWillReceiveProps(nextProps){
+    if (nextProps.mix.uid !== this.props.mix.uid) {
+      this.setState({mode: 'default'})
+    }
     if (this.bookList && this.sortableList) {
       const bookIDs = this.props.mix.Books.map((b) => b.id.toString())
       if (!_.isEqual(bookIDs, this.sortableList.toArray())) {
