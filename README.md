@@ -17,4 +17,5 @@ TODO:
 - user settings: change email/pword
 - user settings: allow for private lists
 - search for user
-- if you delete a book from a mix and it's not connected to any other mixes, remove from 'all'
+- show sign that updating order/adding books etc saved
+- when you change mixtitle update form
