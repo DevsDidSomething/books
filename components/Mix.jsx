@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Edit from './Edit'
 import BookItem from './BookItem'
 import Sortable from 'sortablejs'
+require('../css/BookList.scss')
 
 class Mix extends Component {
   constructor(props){
@@ -73,7 +74,7 @@ class Mix extends Component {
         {this.props.canEdit && this.state.mode === 'editing' &&
           <Edit errors={editErrors} mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} isSearching={this.props.isSearching} />
         }
-        <div ref={(el) => {this.bookList = el}}>
+        <div className='book-list-container' ref={(el) => {this.bookList = el}}>
           {this.props.mix.Books.map(book =>
             <BookItem key={`b-${book.google_id}`} book={book} mix={this.props.mix} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit} mode={this.state.mode}/>
           )}

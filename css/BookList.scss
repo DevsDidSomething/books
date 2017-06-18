@@ -1,0 +1,101 @@
+@import 'variables';
+
+.book-list-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  @media only screen and (max-width: 499px)  {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.search-list-container {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  @media only screen and (max-width: 499px)  {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.book-item, .search-result {
+  cursor: pointer;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+
+  &:hover {
+    .book-info {
+      display: block;
+    }
+  }
+}
+
+.search-result {
+  height: 135px;
+
+  .book-info {
+    font-size: 0.6em;
+  }
+}
+
+.book-item {
+  height: 190px;
+  &.editing {
+    &:hover {
+      .book-info {
+        display: none;
+      }
+      .book-edit-info {
+        background-color: rgba(20, 62, 136, 0.8);
+      }
+    }
+    .book-edit-info {
+      display: block;
+    }
+  }
+}
+
+.book-item-instruction {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 10px;
+}
+
+.delete-book {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 25px;
+
+  &:hover {
+    color: $red;
+  }
+}
+
+.book-edit-info, .book-info {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+  color: #fff;
+  height: 100%;
+  width: 100%;
+  font-size: 0.7em;
+}
+
+.book-info {
+  background-color: rgba(20, 62, 136, 0.9);
+}
+
+.book-edit-info {
+  background-color: rgba(20, 62, 136, 0.5);
+}
+.book-item-title, .book-item-author {
+  padding: 0.4em 0.3em;
+}
+.book-item-title {
+  font-size: 1.3em;
+}
+
+
+// Search Books

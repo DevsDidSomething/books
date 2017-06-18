@@ -1,7 +1,4 @@
-// Variables
-$blue: #18348a;
-$lightblue: #4f25d5;
-$red: #ff0049;
+@import 'variables';
 // Basic styles
 html {
   min-height: 101%;
@@ -9,10 +6,16 @@ html {
 body {
   margin: 0px;
   font-family: "Courier New", Courier, mono;
-  padding-bottom: 100px;
+  padding-bottom: 5em;
+}
+h1, h2 {
+  font-weight: normal;
 }
 h1 {
-  font-weight: normal;
+  @media only screen and (max-width: 499px)  {
+    padding: 0px 10px;
+    margin: 0px;
+  }
 }
 a {
   text-decoration: none;
@@ -27,20 +30,19 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-    outline: none;
+  outline: none;
 }
 .button {
   cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-  &.selected {
+  &:hover, &.selected {
     text-decoration: underline;
   }
 }
+input[type="text"], input[type="password"], input[type="submit"] {
+  font-size: 0.9em;
+}
 input[type="text"], input[type="password"] {
-  padding: 5px 10px;
-  font-size: 14px;
+  padding: 0.3em 0.7em;
 
   &.error {
     border: 1px solid $red;
@@ -53,69 +55,32 @@ input[type="submit"] {
   color: white;
   border: 0px;
   padding: 7px 10px;
-  font-size: 14px;
   &:hover {
     background-color: lighten($blue, 8%);
   }
 }
 .form-error {
   color: $red;
-  font-size: 12px;
-  line-height: 12px;
+  font-size: 0.8em;
+  line-height: 0.8em;
 }
+
 // Layout
 #root {
-  width: 896px;
+  width: 100%;
+  max-width: 896px;
   margin: auto;
 }
 
-// Nav
-.nav-container {
-  color: $blue;
-  border-bottom: 2px solid $blue;
-  padding: 20px 0px;
-}
-
-.nav-container a {
-  color: $blue;
-}
-
-.user-actions-container {
-  float: right;
-  line-height: 2em;
-}
-
-.site-title {
-  margin: 0px;
-  display: inline-block;
-}
-
-.login-form {
-  background-color: white;
-  position: absolute;
-  width: 180px;
-  margin-left: -55px;
-  border: 1px solid $blue;
-  padding: 25px 5px 5px 5px;
-
-  input[type="text"], input[type="password"] {
-    width: 87%;
-  }
-  input[type="submit"] {
-    float: right;
-  }
-}
-.logout {
-  // float: right;
-}
 
 .home {
-  margin: 100px 0px;
-
-  h2 {
-    font-weight: normal;
-  }
+  margin: 4em 0em;
 }
+
+
+
+
+
 
 // Mix items
 .search-book, .delete-mix {
@@ -123,6 +88,9 @@ input[type="submit"] {
 }
 .mix-item-list {
   padding: 20px 0px;
+  @media only screen and (max-width: 499px)  {
+    padding: 1em 10px;
+  }
 }
 .mix-item {
   color: $blue;
@@ -184,123 +152,6 @@ input[type="submit"] {
   color: $blue;
   &:hover {
     color: lighten($blue, 20%);
-  }
-}
-
-.book-info {
-  background-color: rgba(20, 62, 136, 0.9);
-  color: #fff;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  display: none;
-
-  .book-item-title {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-}
-
-.book-item-instruction {
-  position: absolute;
-}
-
-// Book Items
-.book-item {
-  position: relative;
-  background-size: 128px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  height: 180px;
-  width: 128px;
-  cursor: pointer;
-
-  .book-item-instruction {
-    width: 118px;
-    bottom: 10px;
-  }
-  .book-info {
-    padding: 10px 5px;
-    height: 180px;
-    width: 128px;
-    font-size: 12px;
-
-    .book-item-title {
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-  }
-
-  &:hover {
-    .book-info {
-      display: block;
-    }
-  }
-
-  .book-edit-info {
-    background-color: rgba(20, 62, 136, 0.5);
-    color: #fff;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    padding: 10px 5px;
-    height: 180px;
-    width: 128px;
-    font-size: 12px;
-    display: none;
-  }
-
-  &.editing {
-    &:hover {
-      .book-info {
-        display: none;
-      }
-      .book-edit-info {
-        background-color: rgba(20, 62, 136, 0.8);
-      }
-    }
-    .book-edit-info {
-      display: block;
-    }
-  }
-  .delete-book {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 25px;
-
-    &:hover {
-      color: $red;
-    }
-  }
-}
-
-.search-result {
-  position: relative;
-  width: 96px;
-  height: 135px;
-  background-size: 96px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  cursor: pointer;
-
-  &:hover {
-    .book-info {
-      padding: 5px 3px;
-      width: 96px;
-      height: 135px;
-      font-size: 11px;
-      display: block;
-
-      .book-item-title {
-        font-size: 12px;
-        margin-bottom: 3px;
-      }
-      .book-item-instruction {
-        width: 90px;
-        bottom: 5px;
-      }
-    }
   }
 }
 

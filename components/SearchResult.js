@@ -10,7 +10,7 @@ export default class SearchResult extends Component {
       >
         <div className='book-info'>
           <div className='book-item-title'>{this.props.result.title}</div>
-          <div>by {this.props.result.author}</div>
+          <div className='book-item-author'>by {this.props.result.author}</div>
           <div className='book-item-instruction'>Click to add</div>
         </div>
       </div>

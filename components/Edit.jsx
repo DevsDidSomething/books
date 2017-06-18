@@ -37,7 +37,7 @@ class Edit extends Component {
   renderSearchResults(results) {
     if (results.length) {
       return (
-        <div className="edit-form-row">
+        <div className="search-list-container edit-form-row">
           {results.map(result =>
             <SearchResult key={`r-${result.google_id}`} result={result} onClick={this.addBook} />
           )}

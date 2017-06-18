@@ -66,7 +66,9 @@ class LoginForm extends Component {
     return(
       <span>
         <span className={this.state.mode === 'login' ? 'button selected' : 'button'} onClick={this.toggleLogin}>login</span>
-        {' / '}
+        <span className="divider">
+          {' / '}
+        </span>
         <span className={this.state.mode === 'signup' ? 'button selected' : 'button'} onClick={this.toggleSignup}>signup</span>
         {(this.state.mode === 'login' || this.state.mode === 'signup') &&
           <form className='login-form' onSubmit={this.login}>

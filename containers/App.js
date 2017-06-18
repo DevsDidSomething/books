@@ -16,7 +16,7 @@ class App extends Component {
 
   render(){
     return(
-      <span>
+      <div className='app'>
         <Header params={this.props.match.params}  />
         {this.props.match.params.username &&
           <Books params={this.props.match.params} />
@@ -24,7 +24,7 @@ class App extends Component {
         {!this.props.match.params.username &&
           <Home />
         }
-      </span>
+      </div>
     )
   }
 }

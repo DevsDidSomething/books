@@ -20,7 +20,7 @@ export default class BookItem extends Component {
         onClick={() => this.props.previewBook(this.props.book.google_id)}>
         <div className='book-info'>
           <div className='book-item-title'>{this.props.book.title}</div>
-          <div>by {this.props.book.author}</div>
+          <div className='book-item-author'>by {this.props.book.author}</div>
           <div className='book-item-instruction'>Click to open</div>
         </div>
         {this.props.canEdit &&
