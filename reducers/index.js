@@ -33,6 +33,10 @@ const app = (state = {}, action) => {
           ...action.payload
         }
       })
+    case AppActions.SAVE_CONFIRMATION:
+      return Object.assign({}, state, {
+        showSaveConfirmation: action.payload
+      })
     case AppActions.RECEIVE_ALL_MIXES:
       return Object.assign({}, state, {
         allMixes: action.payload

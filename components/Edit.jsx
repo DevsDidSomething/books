@@ -88,6 +88,7 @@ class Edit extends Component {
         {this.props.mix.name !== 'All' &&
           <div className='edit-form-row'>
             <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+            <div className={this.props.showSaveConfirmation ? 'save-confirmation visible' : 'save-confirmation'}>Changes saved!</div>
           </div>
         }
         <span className='close-form' onClick={this.props.toggleEdit}>&times;</span>

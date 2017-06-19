@@ -9,6 +9,7 @@ class Mix extends Component {
     super(props)
     this.toggleEdit = this.toggleEdit.bind(this)
     this.updateListOrder = this.updateListOrder.bind(this)
+    this.removeSaveConfirmation = this.removeSaveConfirmation.bind(this)
     this.state = {
       mode: 'default'
     }
@@ -27,6 +28,10 @@ class Mix extends Component {
     this.props.updateMixOrder(this.props.mix.uid, newOrder)
   }
 
+  removeSaveConfirmation(){
+    this.props.saveConfirmation(false)
+  }
+
   componentWillReceiveProps(nextProps){
     if (nextProps.mix.uid !== this.props.mix.uid) {
       if (nextProps.mix.Books.length === 0) {
@@ -40,6 +45,10 @@ class Mix extends Component {
       if (!_.isEqual(bookIDs, this.sortableList.toArray())) {
         this.sortableList.sort(bookIDs)
       }
+    }
+    if (nextProps.showSaveConfirmation){
+      clearTimeout(this.removeSaveConfirmation)
+      setTimeout(this.removeSaveConfirmation, 3000)
     }
   }
 
@@ -72,7 +81,7 @@ class Mix extends Component {
         </div>
 
         {this.props.canEdit && this.state.mode === 'editing' &&
-          <Edit errors={editErrors} mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} isSearching={this.props.isSearching} />
+          <Edit showSaveConfirmation={this.props.showSaveConfirmation} errors={editErrors} mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} isSearching={this.props.isSearching} />
         }
         <div className='book-list-container' ref={(el) => {this.bookList = el}}>
           {this.props.mix.Books.map(book =>

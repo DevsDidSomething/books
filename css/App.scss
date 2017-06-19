@@ -93,8 +93,18 @@ input[type="submit"] {
 
 
 // Mix items
-.search-book, .delete-mix {
+.search-book, .delete-mix, .save-confirmation {
   display: inline-block;
+}
+.save-confirmation {
+  float: right;
+  color: $green;
+  opacity: 0;
+  transition: opacity .4s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+  }
 }
 .mix-item-list {
   padding: 20px 0px;
@@ -159,7 +169,7 @@ input[type="submit"] {
   position: absolute;
   top: 0px;
   right: 5px;
-  font-size: 25px;
+  font-size: 35px;
   color: $blue;
   &:hover {
     color: lighten($blue, 20%);

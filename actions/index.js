@@ -180,6 +180,7 @@ export const addBook = ( book, mixUid ) => {
       } else {
         dispatch(receiveBooks(json.data))
         dispatch(getSearchResults([]))
+        dispatch(saveConfirmation(true))
       }
     })
   }
@@ -200,6 +201,7 @@ export const deleteBook = ( bookID, mixUid ) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveBooks(json.data))
+        dispatch(saveConfirmation(true))
       }
     })
   }
@@ -276,6 +278,14 @@ export const createMix = ( mixName ) => {
   }
 }
 
+export const SAVE_CONFIRMATION = `${PREFIX}.SAVE_CONFIRMATION`;
+export const saveConfirmation = (value) => {
+  return {
+    type: SAVE_CONFIRMATION,
+    payload: value
+  }
+}
+
 export const updateMixOrder = ( mixUid, bookOrder ) => {
   return ( dispatch, getState ) => {
     return fetch(`/m/${mixUid}/order`, {
@@ -292,6 +302,7 @@ export const updateMixOrder = ( mixUid, bookOrder ) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveBooks(json.data))
+        dispatch(saveConfirmation(true))
       }
     })
   }
@@ -316,6 +327,7 @@ export const updateMix = ( mixUid, mixName ) => {
         dispatch(receiveMixes(json.data))
         const mix = _.find(json.data, ['uid', mixUid])
         dispatch(pushToPath(`/${currentUsername}/${mixUid}/${mix.webstring}`))
+        dispatch(saveConfirmation(true))
       }
     })
   }
