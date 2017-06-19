@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MixItem from './MixItem'
-import Mix from './Mix'
+import MixContainer from '../containers/MixContainer'
 
 class Books extends Component {
   constructor(props) {
@@ -8,6 +8,7 @@ class Books extends Component {
     this.createMix = this.createMix.bind(this)
     this.previewBook = this.previewBook.bind(this)
     this.creatingMixMode = this.creatingMixMode.bind(this)
+    this.renderMixes = this.renderMixes.bind(this)
     this.state = {
       mode: 'default',
       previewing: false
@@ -25,7 +26,7 @@ class Books extends Component {
     this.props.createMix(this.state.mixName)
   }
 
-  renderMixes(user) {
+  renderMixItems(user) {
     if (user.Mixes.length) {
       return (
         <span>
@@ -34,8 +35,24 @@ class Books extends Component {
               key={ mix.id }
               username={ user.username }
               mix={ mix }
-              selected={ this.props.bookshelf.mix.id === mix.id }
+              selected={ this.props.params.mix_id === mix.uid }
               isLast={ i === user.Mixes.length-1 } />
+          )}
+        </span>
+      )
+    }
+  }
+
+  renderMixes(bookshelf) {
+    if (bookshelf.mixes.length) {
+      return (
+        <span>
+          {bookshelf.mixes.map( (mix, i) =>
+            <MixContainer
+              canEdit={this.props.app.user.id === bookshelf.user.id}
+              mix={mix}
+              previewBook={this.previewBook}
+            />
           )}
         </span>
       )
@@ -64,7 +81,7 @@ class Books extends Component {
     return (
       <div>
         <div className='mix-item-list'>
-          {this.renderMixes(this.props.bookshelf.user)}
+          {this.renderMixItems(this.props.bookshelf.user)}
           {this.props.bookshelf.user.id === this.props.app.user.id &&
             <span className='create-mix button' onClick={this.creatingMixMode}>{this.state.mode === 'creatingMix' ? '-Create New Mix' : '+Create New Mix'}</span>
           }
@@ -75,21 +92,7 @@ class Books extends Component {
             <input type="submit" value="Create Mix"/>
           </form>
         }
-        <Mix
-          showSaveConfirmation={this.props.app.showSaveConfirmation}
-          saveConfirmation={this.props.saveConfirmation}
-          errors={this.props.app.errors}
-          canEdit={(this.props.app.user.id === this.props.bookshelf.user.id) && (this.props.bookshelf.mix.name !== 'All')}
-          mix={this.props.bookshelf.mix}
-          searchResults={this.props.app.searchResults}
-          deleteMix={this.props.deleteMix}
-          searchBook={this.props.searchBook}
-          addBook={this.props.addBook}
-          updateMix={this.props.updateMix}
-          deleteBook={this.props.deleteBook}
-          previewBook={this.previewBook}
-          updateMixOrder={this.props.updateMixOrder}
-          isSearching={this.props.app.isSearching} />
+        {this.renderMixes(this.props.bookshelf)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
           <div className='close-preview' onClick={() => this.setState({previewing: false})}>&times;</div>

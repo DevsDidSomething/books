@@ -32,13 +32,13 @@ router.get('/allmixes', (req, res) => {
 router.get('/:username/:mix_uid', (req, res) => {
   models.User.findOne({where: {username: req.params.username}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
     if ( req.params.mix_uid === 'false' ) {
-      models.Mix.findOne({where: {UserId: user.id, name: 'All'}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixAll) => {
-        let bookshelf = {user: user, mix: mixAll}
+      models.Mix.findAll({where: {UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
+        let bookshelf = {user: user, mixes: mixes}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
       })
     } else {
       models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mix) => {
-        let bookshelf = {user: user, mix: mix}
+        let bookshelf = {user: user, mixes: [mix]}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
       })
     }
@@ -69,7 +69,7 @@ router.post('/:mix_uid/books', (req, res) => {
                     books = _.sortBy(books, (b) => {
                       return b.BookMix.order
                     })
-                    res.json({status: 'success', message: 'Saved book', data: books});
+                    res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
                   })
                 })
               })
@@ -96,7 +96,7 @@ router.post('/:mix_uid/books', (req, res) => {
                     books = _.sortBy(books, (b) => {
                       return b.BookMix.order
                     })
-                    res.json({status: 'success', message: 'Saved book', data: books});
+                    res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
                   })
                 })
               })
@@ -136,7 +136,7 @@ router.delete('/:mix_uid/books/:book_id', (req, res) => {
                 b.BookMix.update({order: b.BookMix.order-1})
               }
             })
-            res.json({status: 'success', message: 'Removed book', data: books});
+            res.json({status: 'success', message: 'Removed book', data: {mixUid: mix.uid, books: books}});
           })
         })
       })

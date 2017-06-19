@@ -9,6 +9,7 @@ class Books extends Component {
 
   componentWillReceiveProps(nextProps) {
     const params = nextProps.params
+    const currentMixId = this.props.params.mix_id || false
     if (!nextProps.app.isFetchingBookshelf) {
       const mixUid = params.mix_id || false
       const username = params.username
@@ -17,7 +18,7 @@ class Books extends Component {
         this.props.getBookshelf(username, mixUid)
       } else if (bookshelf.user.username !== username) {
         this.props.getBookshelf(username, mixUid)
-      } else if ((bookshelf.mix.uid !== mixUid) && !(bookshelf.mix.name === 'All' && mixUid === false)){
+      } else if (currentMixId !== mixUid){
         this.props.getBookshelf(username, mixUid)
       }
     }
@@ -37,14 +38,8 @@ class Books extends Component {
             params={this.props.params}
             bookshelf={this.props.bookshelf}
             app={this.props.app}
-            deleteMix={this.props.deleteMix}
-            searchBook={this.props.searchBook}
-            addBook={this.props.addBook}
             createMix={this.props.createMix}
-            updateMix={this.props.updateMix}
-            deleteBook={this.props.deleteBook}
-            saveConfirmation={this.props.saveConfirmation}
-            updateMixOrder={this.props.updateMixOrder} />
+          />
         }
       </span>
     )

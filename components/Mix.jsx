@@ -81,7 +81,16 @@ class Mix extends Component {
         </div>
 
         {this.props.canEdit && this.state.mode === 'editing' &&
-          <Edit showSaveConfirmation={this.props.showSaveConfirmation} errors={editErrors} mix={this.props.mix} searchResults={this.props.searchResults} deleteMix={this.props.deleteMix} searchBook={this.props.searchBook} addBook={this.props.addBook} updateMix={this.props.updateMix} toggleEdit={this.toggleEdit} isSearching={this.props.isSearching} />
+          <Edit
+            showSaveConfirmation={this.props.showSaveConfirmation}
+            errors={editErrors} mix={this.props.mix}
+            searchResults={this.props.searchResults}
+            deleteMix={this.props.deleteMix}
+            searchBook={this.props.searchBook}
+            addBook={this.props.addBook}
+            updateMix={this.props.updateMix}
+            toggleEdit={this.toggleEdit}
+            isSearching={this.props.isSearching} />
         }
         <div className='book-list-container' ref={(el) => {this.bookList = el}}>
           {this.props.mix.Books.map(book =>

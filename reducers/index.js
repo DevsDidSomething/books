@@ -1,16 +1,17 @@
 import { combineReducers } from 'redux'
 import * as AppActions from "../actions/index"
+const _ = require( 'lodash' )
 
 const bookshelf = (state = {}, action) => {
   switch (action.type) {
     case AppActions.RECEIVE_BOOKSHELF:
       return action.payload
     case AppActions.RECEIVE_BOOKS:
+      const mixIndex = _.findIndex(state.mixes, ['uid', action.payload.mixUid])
+      const mix = Object.assign({}, state.mixes[mixIndex], {Books: action.payload.books})
+      state.mixes.splice(mixIndex, 1, mix)
       return Object.assign({}, state, {
-        mix: {
-          ...state.mix,
-          Books: action.payload
-        }
+        mixes: state.mixes
       })
     case AppActions.RECEIVE_MIXES:
       return Object.assign({}, state, {
