@@ -67,12 +67,10 @@ class Edit extends Component {
         {this.props.errors &&
           <div className="form-error">{this.props.errors}</div>
         }
-        {this.props.mix.name !== 'All' &&
-          <form className='edit-form-row' onSubmit={this.updateMix}>
-            <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
-            <input type="submit" value="Update Title"/>
-          </form>
-        }
+        <form className='edit-form-row' onSubmit={this.updateMix}>
+          <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
+          <input type="submit" value="Update Title"/>
+        </form>
         <div className='edit-form-row'>
           <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
         </div>
@@ -85,12 +83,10 @@ class Edit extends Component {
             {this.renderSearchResults(this.props.searchResults)}
           </div>
         }
-        {this.props.mix.name !== 'All' &&
-          <div className='edit-form-row'>
-            <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
-            <div className={this.props.showSaveConfirmation ? 'save-confirmation visible' : 'save-confirmation'}>Changes saved!</div>
-          </div>
-        }
+        <div className='edit-form-row'>
+          <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+          <div className={this.props.showSaveConfirmation ? 'save-confirmation visible' : 'save-confirmation'}>Changes saved!</div>
+        </div>
         <span className='close-form' onClick={this.props.toggleEdit}>&times;</span>
       </div>
     )

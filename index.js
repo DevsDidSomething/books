@@ -60,7 +60,7 @@ app.get('/logout', (req, res) => {
 });
 
 function userData(user) {
-  return {id: user.id, username: user.username, email: user.email}
+  return {id: user.id, username: user.username, email: user.email, admin: user.username === 'kray'}
 }
 
 app.post('/login',  (req, res, next) => {
@@ -107,18 +107,9 @@ app.post('/signup',  (req, res, next) => {
             if (!user) {
               return res.status(422).send('no user somehow')
             }
-            let uid = l.randId()
-            models.Mix.create({
-              uid: uid,
-              webstring: 'All',
-              name: 'All'
-            }).then( (mix) => {
-              mix.setUser(user).then( (result) => {
-                req.login(user, (err) => {
-                  if (err) { return res.status(422).send(err) }
-                  return res.json({status: 'success', message: 'Succesfully created user', data: userData(user)});
-                })
-              })
+            req.login(user, (err) => {
+              if (err) { return res.status(422).send(err) }
+              return res.json({status: 'success', message: 'Succesfully created user', data: userData(user)});
             })
           })
         })

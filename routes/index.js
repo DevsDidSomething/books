@@ -23,7 +23,7 @@ const publicUserAttributes = ['id', 'username']
 
 // Get a full bookshelf (initial load)
 router.get('/allmixes', (req, res) => {
-  models.Mix.findAll({where: {name: {not: 'All'}}, include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
+  models.Mix.findAll({include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
     res.json({status: 'success', message: 'Retrieved all mixes', data: mixes})
   })
 })
@@ -48,30 +48,22 @@ router.get('/:username/:mix_uid', (req, res) => {
 // Save a book
 router.post('/:mix_uid/books', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
-    if (mix.UserId !== req.user.id) {
+    if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to edit this mix'}}})
-    }
-    if (mix.name === 'All') {
-      return res.status(403).send({error: {bookshelf: {edit: 'You cannot edit the All mix'}}})
     }
     mix.countBooks().then( (mixBooksCount) => {
       let bookData = req.body.book
       models.Book.findOne({where: {google_id: bookData.google_id}}).then( (book) => {
         if (book){
           book.getMixes().then( (bookMixes) => {
-            models.Mix.findOne({where: {UserId: req.user.id, name: 'All'}}).then( (mixAll) => {
-              mixAll.countBooks().then( (mixAllBooksCount) => {
-                mix.BookMix = {order: mixBooksCount}
-                mixAll.BookMix = {order: mixAllBooksCount}
-                bookMixes.push(mix, mixAll)
-                book.setMixes(_.uniq(bookMixes)).then( () => {
-                  mix.getBooks().then( (books) => {
-                    books = _.sortBy(books, (b) => {
-                      return b.BookMix.order
-                    })
-                    res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
-                  })
+            mix.BookMix = {order: mixBooksCount}
+            bookMixes.push(mix)
+            book.setMixes(_.uniq(bookMixes)).then( () => {
+              mix.getBooks().then( (books) => {
+                books = _.sortBy(books, (b) => {
+                  return b.BookMix.order
                 })
+                res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
               })
             })
           })
@@ -87,18 +79,13 @@ router.post('/:mix_uid/books', (req, res) => {
             categories: bookData.categories,
             author: bookData.author
           }).then( (book) => {
-            models.Mix.findOne({where: {UserId: req.user.id, name: 'All'}}).then( (mixAll) => {
-              mixAll.countBooks().then( (mixAllBooksCount) => {
-                mix.BookMix = {order: mixBooksCount}
-                mixAll.BookMix = {order: mixAllBooksCount}
-                book.setMixes([mix, mixAll]).then( () => {
-                  mix.getBooks().then( (books) => {
-                    books = _.sortBy(books, (b) => {
-                      return b.BookMix.order
-                    })
-                    res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
-                  })
+            mix.BookMix = {order: mixBooksCount}
+            book.setMixes([mix]).then( () => {
+              mix.getBooks().then( (books) => {
+                books = _.sortBy(books, (b) => {
+                  return b.BookMix.order
                 })
+                res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
               })
             })
           })
@@ -111,21 +98,12 @@ router.post('/:mix_uid/books', (req, res) => {
 // Delete a Book
 router.delete('/:mix_uid/books/:book_id', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
-    if (mix.UserId !== req.user.id) {
+    if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to delete books from this mix'}}})
     }
     models.Book.findOne({where: {id: req.params.book_id}, include: [models.Mix]}).then( (book) => {
       book.getMixes().then( (bookMixes) => {
         const bookIndex = _.find(bookMixes, ['id', mix.id]).BookMix.order
-        const userBookMixes = _.filter(bookMixes, (m) => {
-          return (m.UserId === mix.UserId && ((m.id !== mix.id) && (m.name !== 'All')))
-        })
-        if (userBookMixes.length === 0) {
-          _.remove(bookMixes, {
-            name: 'All',
-            UserId: mix.UserId
-          })
-        }
         _.remove(bookMixes, {
           id: mix.id
         })
@@ -147,14 +125,10 @@ router.delete('/:mix_uid/books/:book_id', (req, res) => {
 // Delete a Mix
 router.delete('/:mix_uid', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
-    if (mix.UserId !== req.user.id) {
+    if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to delete this mix'}}})
     }
-    if (mix.name === 'All') {
-      return res.status(403).send({error: {bookshelf: {edit: 'You cannot delete the default mix'}}})
-    }
     mix.destroy().then( () => {
-      // TODO send them to 'all' after this
       models.Mix.findAll({where: {UserId: req.user.id}}).then( (mixes) => {
         res.json({status: 'success', message: 'Saved book', data: mixes});
       })
@@ -165,7 +139,7 @@ router.delete('/:mix_uid', (req, res) => {
 // Update MixOrder
 router.post('/:mix_uid/order', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
-    if (mix.UserId !== req.user.id) {
+    if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {bookshelf: {edit: 'Not authorized to edit this mix'}}})
     }
     let order = req.body.order
@@ -184,13 +158,10 @@ router.post('/:mix_uid/order', (req, res) => {
 // Update Mix
 router.put('/:mix_uid', (req, res) => {
   models.Mix.findOne({where: {uid: req.params.mix_uid}}).then( (mix) => {
-    if (mix.UserId !== req.user.id) {
+    if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {mix: {edit: 'Not authorized to delete this mix'}}})
     }
     let name = req.body.name
-    if (name === 'All'){
-      return res.status(403).send({error: {mix: {edit: 'You cannot give this mix the default name'}}})
-    }
     let webstring = l.createWebString(name)
     mix.update({
       name: name,
@@ -206,9 +177,6 @@ router.put('/:mix_uid', (req, res) => {
 // Create a new Mix
 router.post('/mixes', (req, res) => {
   let name = req.body.name
-  if (name === 'All'){
-    return res.status(403).send({error: {mix: {edit: 'You cannot give this mix the default name'}}})
-  }
   let webstring = l.createWebString(name)
   let uid = l.randId()
   models.Mix.create({
