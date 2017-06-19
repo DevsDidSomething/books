@@ -29,6 +29,10 @@
     position: absolute;
     right: 10px;
     top: 10px;
+
+    &.open {
+      font-size: 2.5em;
+    }
   }
 }
 .user-actions-container {
@@ -37,10 +41,10 @@
     text-align: left;
     border: 1px solid $blue;
     background-color: #fff;
-    width: 50%;
+    width: 70%;
     position: absolute;
     right: 0px;
-    top: 30px;
+    top: 50px;
     display: none;
     padding-bottom: 10px;
     .button {
@@ -74,7 +78,8 @@
   @media only screen and (min-width: 500px)  {
     position: absolute;
     width: 180px;
-    margin-left: -55px;
+    margin-left: -10px;
+    margin-top: -15px;
     border: 1px solid $blue;
   }
   padding: 25px 5px 5px 5px;

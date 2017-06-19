@@ -45,7 +45,7 @@ class Header extends Component {
             </h1>
           }
         </div>
-        <div onClick={this.toggleForm} className="button hamburger">{this.state.open ? '×' : '☰'}</div>
+        <div onClick={this.toggleForm} className={this.state.open ? 'button hamburger open' : 'button hamburger'}>{this.state.open ? '×' : '☰'}</div>
         {this.props.user &&
           <div className={this.state.open ? 'user-actions-container open' : 'user-actions-container'}>
             <Link className='button' to={`/${this.props.user.username}`}>{this.props.user.username}</Link>

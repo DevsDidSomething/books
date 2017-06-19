@@ -26,6 +26,11 @@ a {
 div {
   box-sizing: border-box;
 }
+input, textarea {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border: 1px solid $blue;
+}
 input:focus,
 select:focus,
 textarea:focus,
@@ -35,7 +40,9 @@ button:focus {
 .button {
   cursor: pointer;
   &:hover, &.selected {
-    text-decoration: underline;
+    @media only screen and (min-width: 499px)  {
+      text-decoration: underline;
+    }
   }
 }
 input[type="text"], input[type="password"], input[type="submit"] {
@@ -96,10 +103,11 @@ input[type="submit"] {
   color: $blue;
   a {
     color: $blue;
-
-    &:hover {
-      text-decoration: underline;
-      color: lighten($lightblue, 5%);
+    @media only screen and (min-width: 500px)  {
+      &:hover {
+        text-decoration: underline;
+        color: lighten($lightblue, 5%);
+      }
     }
   }
 
