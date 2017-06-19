@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch'
+const _ = require( 'lodash' )
 
 const PREFIX = "appActions";
 
@@ -298,6 +299,7 @@ export const updateMixOrder = ( mixUid, bookOrder ) => {
 
 export const updateMix = ( mixUid, mixName ) => {
   return ( dispatch, getState ) => {
+    const currentUsername = getState().app.user.username
     return fetch(`/m/${mixUid}`, {
       credentials: 'include',
       method: 'PUT',
@@ -312,6 +314,8 @@ export const updateMix = ( mixUid, mixName ) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveMixes(json.data))
+        const mix = _.find(json.data, ['uid', mixUid])
+        dispatch(pushToPath(`/${currentUsername}/${mixUid}/${mix.webstring}`))
       }
     })
   }

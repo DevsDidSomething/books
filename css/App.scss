@@ -48,7 +48,7 @@ button:focus {
 input[type="text"], input[type="password"], input[type="submit"] {
   font-size: 1em;
   @media only screen and (min-width: 499px)  {
-    font-size: 0.9em;
+    font-size: 14px;
   }
 }
 input[type="text"], input[type="password"] {
@@ -64,7 +64,7 @@ input[type="submit"] {
   background-color: $blue;
   color: white;
   border: 0px;
-  padding: 7px 10px;
+  padding: 5px 10px;
   &:hover {
     background-color: lighten($blue, 8%);
   }
