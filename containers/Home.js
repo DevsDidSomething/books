@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as AppActions from '../actions'
+import { getAllMixes } from '../actions'
 import MixItem from '../components/MixItem'
 
 class Home extends Component {
@@ -35,7 +35,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = ({
-  getAllMixes: AppActions.getAllMixes
+  getAllMixes: getAllMixes
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

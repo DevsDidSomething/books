@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import Books from './Books'
 import Header from './Header'
 import Home from './Home'
-import { bindActionCreators } from 'redux'
-import * as AppActions from '../actions'
+import { pushToPath } from '../actions'
+
 
 class App extends Component {
   componentWillReceiveProps(nextProps) {
@@ -33,8 +33,8 @@ const mapStateToProps = (state, ownProps) => {
   return state
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(AppActions, dispatch)
-}
+const mapDispatchToProps = ({
+  pushToPath: pushToPath
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

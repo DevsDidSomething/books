@@ -39,10 +39,12 @@ class Mix extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.selected && this.props.mix.Books.length === 0) {
-      this.setState({mode: 'editing'})
-    } else {
-      this.setState({mode: 'default'})
+    if (this.props.selected !== nextProps.selected){
+      if (nextProps.selected && nextProps.mix.Books.length === 0) {
+        this.setState({mode: 'editing'})
+      } else {
+        this.setState({mode: 'default'})
+      }
     }
     if (this.bookList && this.sortableList) {
       const bookIDs = this.props.mix.Books.map((b) => b.id.toString())

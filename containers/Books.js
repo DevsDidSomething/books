@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Bookshelf from '../components/Bookshelf'
 import { bindActionCreators } from 'redux'
-import * as AppActions from '../actions'
+import { getBookshelf, createMix } from '../actions'
 import _ from 'lodash'
 
 class Books extends Component {
@@ -50,8 +50,9 @@ const mapStateToProps = (state, ownProps) => {
   return state
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(AppActions, dispatch)
-}
+const mapDispatchToProps = ({
+  getBookshelf: getBookshelf,
+  createMix: createMix
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Books)

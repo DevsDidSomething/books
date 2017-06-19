@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import LoginForm from '../components/LoginForm'
 import { bindActionCreators } from 'redux'
-import * as AppActions from '../actions'
+import { login } from '../actions'
 require('../css/Header.scss')
 
 class Header extends Component {
@@ -73,7 +73,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = ({
-  login: AppActions.login
+  login: login
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

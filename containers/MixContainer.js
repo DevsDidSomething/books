@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Mix from '../components/Mix'
-import { bindActionCreators } from 'redux'
-import * as AppActions from '../actions'
+import { deleteMix, searchBook, addBook, updateMix, deleteBook, updateMixOrder, saveConfirmation } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -13,8 +12,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(AppActions, dispatch)
-}
+const mapDispatchToProps = ({
+  deleteMix: deleteMix,
+  searchBook: searchBook,
+  addBook: addBook,
+  updateMix: updateMix,
+  deleteBook: deleteBook,
+  updateMixOrder: updateMixOrder,
+  saveConfirmation: saveConfirmation
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Mix)
