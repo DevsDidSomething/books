@@ -8,7 +8,8 @@ const mapStateToProps = (state, ownProps) => {
     errors: state.app.errors,
     searchResults: state.app.searchResults,
     isSearching: state.app.isSearching,
-    showSaveConfirmation: state.app.showSaveConfirmation
+    showSaveConfirmation: state.app.showSaveConfirmation,
+    isFetchingBookshelf: state.app.isFetchingBookshelf
   }
 }
 

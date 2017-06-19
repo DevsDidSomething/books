@@ -99,9 +99,11 @@ class Mix extends Component {
             isSearching={this.props.isSearching} />
         }
         <div className='book-list-container' ref={(el) => {this.bookList = el}}>
-          {this.props.mix.Books.map(book =>
-            <BookItem key={`b-${book.google_id}`} book={book} mix={this.props.mix} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit} mode={this.state.mode}/>
-          )}
+          {!this.props.isFetchingBookshelf &&
+            this.props.mix.Books.map(book =>
+              <BookItem key={`b-${book.google_id}`} book={book} mix={this.props.mix} deleteBook={this.props.deleteBook} previewBook={this.props.previewBook} canEdit={this.props.canEdit} mode={this.state.mode}/>
+            )
+          }
         </div>
       </div>
     )
