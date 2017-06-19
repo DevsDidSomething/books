@@ -46,7 +46,10 @@ button:focus {
   }
 }
 input[type="text"], input[type="password"], input[type="submit"] {
-  font-size: 0.9em;
+  font-size: 1em;
+  @media only screen and (min-width: 499px)  {
+    font-size: 0.9em;
+  }
 }
 input[type="text"], input[type="password"] {
   padding: 0.3em 0.7em;
