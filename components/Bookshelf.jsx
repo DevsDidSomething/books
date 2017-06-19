@@ -49,7 +49,9 @@ class Books extends Component {
         <span>
           {bookshelf.mixes.map( (mix, i) =>
             <MixContainer
+              key= {`mix-${mix.id}`}
               canEdit={(this.props.app.user.id === bookshelf.user.id) || this.props.app.user.admin}
+              selected={ this.props.params.mix_id === mix.uid }
               mix={mix}
               previewBook={this.previewBook}
             />
