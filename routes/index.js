@@ -150,7 +150,7 @@ router.post('/:mix_uid/order', (req, res) => {
       books = _.sortBy(books, (b) => {
         return b.BookMix.order
       })
-      res.json({status: 'success', message: 'Saved book', data: books});
+      res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
     })
   })
 })
