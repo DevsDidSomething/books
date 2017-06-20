@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MixItem from './MixItem'
 import MixContainer from '../containers/MixContainer'
+import { Link } from 'react-router-dom'
 
 class Books extends Component {
   constructor(props) {
@@ -30,6 +31,12 @@ class Books extends Component {
     if (user.Mixes.length) {
       return (
         <span>
+          <span className={this.props.params.mix_id ? 'mix-item' : 'mix-item selected'}>
+            <Link to={`/${user.username}`}>
+              All
+            </Link>
+            <span className="separator">&bull;</span>
+          </span>
           {user.Mixes.map( (mix, i) =>
             <MixItem
               key={ mix.id }
