@@ -19,9 +19,7 @@ h1 {
 }
 a {
   text-decoration: none;
-  &:visited {
-    color: inherit;
-  }
+  color: $blue;
 }
 div {
   box-sizing: border-box;

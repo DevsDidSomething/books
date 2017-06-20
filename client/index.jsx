@@ -26,7 +26,7 @@ google.books.setOnLoadCallback( () => {
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <Route path="/:username?/(mixes)?/:mix_id?" component={App}/>
+      <Route path="/:username?/(mixes)?/:mix_id?/:mix_name?/:action?" component={App}/>
     </BrowserRouter>
   </Provider>,
   el

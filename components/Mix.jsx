@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Edit from './Edit'
 import BookItem from './BookItem'
 import Sortable from 'sortablejs'
+import { Link } from 'react-router-dom'
+
 require('../css/BookList.scss')
 
 class Mix extends Component {
@@ -10,6 +12,7 @@ class Mix extends Component {
     this.toggleEdit = this.toggleEdit.bind(this)
     this.updateListOrder = this.updateListOrder.bind(this)
     this.removeSaveConfirmation = this.removeSaveConfirmation.bind(this)
+    this.renderEditButton = this.renderEditButton.bind(this)
     this.state = {
       mode: 'default'
     }
@@ -18,7 +21,9 @@ class Mix extends Component {
   toggleEdit(){
     if (this.state.mode === 'editing') {
       this.setState({mode: 'default'})
+      this.props.pushToPath(`/${this.props.username}/mixes/${this.props.mix.uid}/${this.props.mix.webstring}`)
     } else {
+      this.props.pushToPath(`/${this.props.username}/mixes/${this.props.mix.uid}/${this.props.mix.webstring}/edit`)
       this.setState({mode: 'editing'})
     }
   }
@@ -33,14 +38,14 @@ class Mix extends Component {
   }
 
   componentDidMount(){
-    if (this.props.selected && this.props.mix.Books.length === 0) {
+    if (this.props.openEdit) {
       this.setState({mode: 'editing'})
     }
   }
 
   componentWillReceiveProps(nextProps){
     if (this.props.selected !== nextProps.selected){
-      if (nextProps.selected && nextProps.mix.Books.length === 0) {
+      if (nextProps.openEdit) {
         this.setState({mode: 'editing'})
       } else {
         this.setState({mode: 'default'})
@@ -70,6 +75,26 @@ class Mix extends Component {
     }
   }
 
+  renderEditButton(){
+    if (this.props.canEdit){
+      if (this.props.selected) {
+        return(
+          <span className="edit-mix button" onClick={this.toggleEdit}>
+            {this.state.mode === 'editing' ? '-Edit' : '+Edit'}
+          </span>
+        )
+      } else {
+        return(
+          <Link to={`/${this.props.username}/mixes/${this.props.mix.uid}/${this.props.mix.webstring}/edit`}>
+            <span className="edit-mix button">
+              +Edit
+            </span>
+          </Link>
+        )
+      }
+    }
+  }
+
   render() {
     let editErrors = null
     if (this.props.errors && this.props.errors.bookshelf && this.props.errors.bookshelf.edit) {
@@ -78,12 +103,10 @@ class Mix extends Component {
     return (
       <div>
         <div className="mix-title-container">
-          <h1 className="mix-title">{this.props.mix.name}</h1>
-          {this.props.canEdit &&
-            <span className="edit-mix button" onClick={this.toggleEdit}>
-              {this.state.mode === 'editing' ? '-Edit' : '+Edit'}
-            </span>
-          }
+          <Link to={`/${this.props.username}/mixes/${this.props.mix.uid}/${this.props.mix.webstring}`}>
+            <h1 className="mix-title button">{this.props.mix.name}</h1>
+          </Link>
+          {this.renderEditButton()}
         </div>
 
         {this.props.canEdit && this.state.mode === 'editing' &&
