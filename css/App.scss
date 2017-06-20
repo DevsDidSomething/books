@@ -192,6 +192,15 @@ input[type="submit"] {
     display: block;
   }
 
+  .buy-book {
+    margin-left: -400px;
+    z-index: 1;
+    left: 50%;
+    position: fixed;
+    color: white;
+    top: 40px;
+  }
+
   .preview-message {
     pointer-events: none;
     width: 100%;

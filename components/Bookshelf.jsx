@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MixItem from './MixItem'
 import MixContainer from '../containers/MixContainer'
 import { Link } from 'react-router-dom'
+import * as l from '../lib'
 
 class Books extends Component {
   constructor(props) {
@@ -68,11 +69,11 @@ class Books extends Component {
     }
   }
 
-  previewBook( google_id ) {
-    this.setState({previewing: true, bookNotFound: false})
+  previewBook( book ) {
+    this.setState({previewing: book, bookNotFound: false})
     if ( this.props.app.googleLoaded ) {
       let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer)
-      googlePreview.load( google_id, () => {this.setState({bookNotFound: true})} )
+      googlePreview.load( book.google_id, () => {this.setState({bookNotFound: true})} )
     } else {
       console.log('google hasnt loaded')
     }
@@ -87,6 +88,10 @@ class Books extends Component {
   }
 
   render() {
+    let bookString;
+    if (this.state.previewing){
+      bookString = l.createWebString(this.state.previewing.title)
+    }
     return (
       <div>
         <div className='mix-item-list'>
@@ -103,6 +108,7 @@ class Books extends Component {
         }
         {this.renderMixes(this.props.bookshelf)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
+          <a className='buy-book button' target="_blank" href={`https://www.indiebound.org/search/book?searchfor=${bookString}`}>Buy this book</a>
           {this.state.bookNotFound &&
             <div className='preview-message'>Sorry, preview unavailable for this book</div>
           }

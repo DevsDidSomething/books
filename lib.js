@@ -22,7 +22,7 @@ const validateFields = (f, options={}) => {
     errors['username'] = "Username cannot have special characters"
   } else if (f.username.length < 3) {
     errors['username'] = "Please use at least 3 letters"
-  } else if (f.username === 'login' || f.username === 'logout' || f.username === 'signup' || f.username === 'static') {
+  } else if (f.username === 'login' || f.username === 'logout' || f.username === 'signup' || f.username === 'static' || f.username === 'public') {
     errors['username'] = "I see what you're doing but please don't"
   }
 
