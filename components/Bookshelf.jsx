@@ -12,7 +12,8 @@ class Books extends Component {
     this.renderMixes = this.renderMixes.bind(this)
     this.state = {
       mode: 'default',
-      previewing: false
+      previewing: false,
+      bookNotFound: false
     }
   }
 
@@ -68,10 +69,10 @@ class Books extends Component {
   }
 
   previewBook( google_id ) {
-    this.setState({previewing: true})
+    this.setState({previewing: true, bookNotFound: false})
     if ( this.props.app.googleLoaded ) {
       let googlePreview = new google.books.DefaultViewer(this.googlePreviewContainer)
-      googlePreview.load( google_id )
+      googlePreview.load( google_id, () => {this.setState({bookNotFound: true})} )
     } else {
       console.log('google hasnt loaded')
     }
@@ -102,6 +103,9 @@ class Books extends Component {
         }
         {this.renderMixes(this.props.bookshelf)}
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
+          {this.state.bookNotFound &&
+            <div className='preview-message'>Sorry, preview unavailable for this book</div>
+          }
           <div className='preview-background' onClick={() => this.setState({previewing: false})} />
           <div className='close-preview' onClick={() => this.setState({previewing: false})}>&times;</div>
           <div className='google-preview' ref={ (el) => this.googlePreviewContainer = el } />

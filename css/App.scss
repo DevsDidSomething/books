@@ -192,6 +192,16 @@ input[type="submit"] {
     display: block;
   }
 
+  .preview-message {
+    pointer-events: none;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    position: fixed;
+    color: white;
+    top: 50%;
+  }
+
 }
 
 .google-preview {
