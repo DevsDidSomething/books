@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import LoginForm from '../components/LoginForm'
+import LoginMenu from '../components/LoginMenu'
 import { bindActionCreators } from 'redux'
 import { login } from '../actions'
 require('../css/Header.scss')
@@ -57,7 +57,7 @@ class Header extends Component {
         }
         {!this.props.user &&
           <div className={this.state.open ? 'user-actions-container open' : 'user-actions-container'}>
-            <LoginForm login={this.props.login} fromHomepage={this.props.fromHomepage} errors={this.props.errors}/>
+            <LoginMenu login={this.props.login} fromHomepage={this.props.fromHomepage} errors={this.props.errors}/>
           </div>
         }
       </div>

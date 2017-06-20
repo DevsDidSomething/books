@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getAllMixes } from '../actions'
+import { getAllMixes, login } from '../actions'
 import MixItem from '../components/MixItem'
+import LoginForm from '../components/LoginForm'
 
 class Home extends Component {
   componentWillMount() {
@@ -11,11 +12,21 @@ class Home extends Component {
   render(){
     return(
       <div className="home">
+        {!this.props.user &&
+          <span>
+            <h2>
+              Sign Up to Create a Book Mixtape
+            </h2>
+            <LoginForm login={this.props.login} fromHomepage={true} errors={this.props.errors} mode='signup'/>
+            <br />
+            <br />
+          </span>
+        }
         <h2>
           Browse some people's shelves:
         </h2>
         {this.props.mixes &&
-          <div>
+          <div className='mix-item-list'>
             {this.props.mixes.map( (mix, i) =>
               <MixItem
                 key={ mix.id }
@@ -31,11 +42,14 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  mixes: state.app.allMixes
+  user: state.app.user,
+  mixes: state.app.allMixes,
+  errors: state.app.errors.user
 })
 
 const mapDispatchToProps = ({
-  getAllMixes: getAllMixes
+  getAllMixes: getAllMixes,
+  login: login
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)
