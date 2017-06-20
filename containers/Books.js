@@ -16,7 +16,7 @@ class Books extends Component {
       const bookshelf = this.props.bookshelf
       if (_.isEmpty(bookshelf)) {
         this.props.getBookshelf(username, mixUid)
-      } else if (bookshelf.user.username !== username) {
+      } else if (bookshelf.user.username.toLowerCase() !== username.toLowerCase()) {
         this.props.getBookshelf(username, mixUid)
       } else if (currentMixId !== mixUid){
         this.props.getBookshelf(username, mixUid)

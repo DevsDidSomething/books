@@ -91,7 +91,7 @@ app.post('/signup',  (req, res, next) => {
       if (!_.isEmpty(errors)) {
         return res.status(422).send({error: {user: errors}})
       }
-      models.User.findOne({where: {username: req.body.username }}).then( (existingUsername) => {
+      models.User.findOne({where: {username: {ilike: req.body.username} }}).then( (existingUsername) => {
         if (existingUsername){
           return res.status(422).send({error: {user: {username: 'Username is taken'}}})
         }

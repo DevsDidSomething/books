@@ -30,7 +30,7 @@ router.get('/allmixes', (req, res) => {
 
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
-  models.User.findOne({where: {username: req.params.username}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
+  models.User.findOne({where: {username: {ilike: req.params.username}}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
     if ( req.params.mix_uid === 'false' ) {
       models.Mix.findAll({where: {UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
         let bookshelf = {user: user, mixes: mixes}
