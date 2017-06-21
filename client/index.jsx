@@ -21,7 +21,7 @@ const store = createStore(
   applyMiddleware(thunk)
 )
 
-function loadGoogle = () {
+function loadGoogle() {
   if (google) {
     google.books.load()
     google.books.setOnLoadCallback( () => {
