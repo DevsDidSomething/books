@@ -196,13 +196,14 @@ input[type="submit"] {
     @media only screen and (min-width: 500px)  {
       left: 50%;
       margin-left: -400px;
+      top: 40px;
     }
 
     z-index: 1;
     left: 10%;
     position: fixed;
     color: white;
-    top: 40px;
+    top: 15px;
   }
 
   .preview-message {
@@ -218,13 +219,14 @@ input[type="submit"] {
 }
 
 .google-preview {
-  margin-top: 60px;
+  margin-top: 40px;
   margin-right: auto;
   margin-left: auto;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   z-index: 2;
   @media only screen and (min-width: 500px)  {
+    margin-top: 60px;
     width: 800px;
     height: 700px;
   }
@@ -251,7 +253,7 @@ input[type="submit"] {
   color: white;
   position: fixed;
   right: 7px;
-  top: 7px;
+  top: 0px;
   @media only screen and (min-width: 500px)  {
     top: 35px;
     left: 50%;
