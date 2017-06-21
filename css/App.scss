@@ -193,9 +193,13 @@ input[type="submit"] {
   }
 
   .buy-book {
-    margin-left: -400px;
+    @media only screen and (min-width: 500px)  {
+      left: 50%;
+      margin-left: -400px;
+    }
+
     z-index: 1;
-    left: 50%;
+    left: 10%;
     position: fixed;
     color: white;
     top: 40px;
@@ -217,9 +221,13 @@ input[type="submit"] {
   margin-top: 60px;
   margin-right: auto;
   margin-left: auto;
-  width: 800px;
-  height: 700px;
+  width: 80%;
+  height: 80%;
   z-index: 2;
+  @media only screen and (min-width: 500px)  {
+    width: 800px;
+    height: 700px;
+  }
 
   > div > div >div:nth-child(2) {
     display: none;
@@ -242,9 +250,13 @@ input[type="submit"] {
   font-size: 35px;
   color: white;
   position: fixed;
-  top: 35px;
-  left: 50%;
-  margin-left: 420px;
+  right: 7px;
+  top: 7px;
+  @media only screen and (min-width: 500px)  {
+    top: 35px;
+    left: 50%;
+    margin-left: 420px;
+  }
   &:hover {
     color: lighten($blue, 60%);
   }
