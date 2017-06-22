@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import App from '../containers/App'
 import books from '../reducers'
 import * as AppActions from '../actions'
+require('../css/normalize.scss')
 require('../css/App.scss')
 
 import airbrakeJs from 'airbrake-js'
