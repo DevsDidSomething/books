@@ -15,18 +15,26 @@ class Header extends Component {
               Bookshelf
             </Link>
           </h1>
-          {this.props.currentUsername &&
+          {this.props.params.username &&
             <h1>
               <span className="divider">
                 {'/'}
               </span>
-              <Link className='button' to={`/${this.props.currentUsername}`}>
-                {this.props.currentUsername}
+              <Link className='button' to={`/${this.props.params.username}`}>
+                {this.props.params.username}
               </Link>
             </h1>
           }
         </div>
-        <UserMenu showSaveConfirmation={this.props.showSaveConfirmation} saveConfirmation={this.props.saveConfirmation} user={this.props.user} updateUser={this.props.updateUser} login={this.props.login} fromHomepage={this.props.fromHomepage} errors={this.props.errors} />
+        <UserMenu
+          showSaveConfirmation={this.props.showSaveConfirmation}
+          saveConfirmation={this.props.saveConfirmation}
+          user={this.props.user}
+          updateUser={this.props.updateUser}
+          login={this.props.login}
+          params={this.props.params}
+          fromHomepage={this.props.params.username ? false : true}
+          errors={this.props.errors} />
       </div>
     )
   }
@@ -34,8 +42,6 @@ class Header extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   user: state.app.user,
-  currentUsername: ownProps.params.username,
-  fromHomepage: ownProps.params.username ? false : true,
   errors: state.app.errors.user,
   showSaveConfirmation: state.app.showSaveConfirmation.user,
 })

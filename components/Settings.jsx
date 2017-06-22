@@ -34,6 +34,9 @@ class Settings extends Component {
     if (nextProps.errors) {
       this.setState({errors: nextProps.errors})
     }
+    if (nextProps.showSaveConfirmation) {
+      this.setState({errors: {}})
+    }
   }
 
   render() {

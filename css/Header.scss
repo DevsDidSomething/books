@@ -24,30 +24,29 @@
 .hamburger {
   display: none;
   @media only screen and (max-width: 499px)  {
-    font-size:1.4em;
+    font-size:1.6em;
     display: inline-block;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 20px;
+    top: 20px;
 
+    //TODO such a hack
     &.open {
-      font-size: 2.5em;
+      top: 10px;
+      font-size: 3em;
     }
   }
 }
 .right-nav {
   grid-column: 5 / 6;
+  @media only screen and (max-width: 499px)  {
+    grid-column: 1 / 6;
+  }
 }
 .user-actions-container {
   @media only screen and (max-width: 499px)  {
-    border: 1px solid $blue;
-    background-color: #fff;
-    width: 75%;
-    position: absolute;
-    right: 2px;
-    top: 50px;
+    border-top: 2px solid $blue;
     display: none;
-    padding-bottom: 10px;
     .button {
       display: block;
       margin: 10px 0px 10px 10px;
@@ -61,7 +60,7 @@
   }
 
   @media only screen and (min-width: 500px)  {
-    line-height: 5em;
+    margin-top: 30px;
   }
 }
 
@@ -83,7 +82,6 @@
 }
 .user-form-container {
   z-index: 10;
-  line-height: 2em;
   background-color: white;
   padding-top: 25px;
   @media only screen and (min-width: 500px)  {

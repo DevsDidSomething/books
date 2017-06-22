@@ -28,8 +28,7 @@ class LoginMenu extends Component {
 
   componentWillReceiveProps(nextProps) {
     // close the form when you log in
-    if (nextProps.user.id !== this.props.user.id) {
-      console.log('okay is theis aoiwerfwaer')
+    if (nextProps.user.id !== this.props.user.id || nextProps.params.mix_id !== this.props.params.mix_id) {
       this.setState({mode: 'default'})
     }
   }
