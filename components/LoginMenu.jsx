@@ -31,6 +31,12 @@ class LoginMenu extends Component {
     this.setState({mode: mode, errors: {}, password: ''})
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.open === false) {
+      this.changeMode('default')
+    }
+  }
+
   render(){
     return(
       <span>
