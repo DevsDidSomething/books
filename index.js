@@ -61,9 +61,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 });
 
-function userData(user) {
-  return {id: user.id, username: user.username, email: user.email, admin: user.username === 'kray'}
-}
+
 
 app.post('/login',  (req, res, next) => {
   models.User.findOne({where: {username: req.body.username }, attributes: ['id', 'username', 'email']}).then( (user) => {
@@ -77,7 +75,7 @@ app.post('/login',  (req, res, next) => {
         }
         req.login(user, (err) => {
           if (err) { return res.status(422).send(err) }
-          return res.json({status: 'success', message: 'Login successful', data: userData(user)});
+          return res.json({status: 'success', message: 'Login successful', data: l.userData(user)});
         })
       })(req, res, next)
     }
@@ -89,7 +87,7 @@ app.post('/signup',  (req, res, next) => {
     if (err) return res.status(422).send(err)
     bcrypt.hash(req.body.password, salt, (err, hash) => {
       if (err) return res.status(422).send('error hashing')
-      let errors = l.validateFields(req.body, {requireEmail: true})
+      let errors = l.validateFields(req.body, 'signup')
       if (!_.isEmpty(errors)) {
         return res.status(422).send({error: {user: errors}})
       }
@@ -111,7 +109,7 @@ app.post('/signup',  (req, res, next) => {
             }
             req.login(user, (err) => {
               if (err) { return res.status(422).send(err) }
-              return res.json({status: 'success', message: 'Succesfully created user', data: userData(user)});
+              return res.json({status: 'success', message: 'Succesfully created user', data: l.userData(user)});
             })
           })
         })
@@ -128,7 +126,7 @@ app.get('*', (req, res) => {
       console.error('read err', err)
       return res.status(404).end()
     }
-    const user = req.isAuthenticated() ? userData(req.user) : false
+    const user = req.isAuthenticated() ? l.userData(req.user) : false
     const RenderedApp = htmlData.replace('{{USER}}', JSON.stringify(user))
     res.send(RenderedApp)
   })

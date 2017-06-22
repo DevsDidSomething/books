@@ -20,7 +20,7 @@ class LoginForm extends Component {
     if (this.props.mode === 'signup') {
       fields['email'] = this.state.email
     }
-    let errors = l.validateFields(fields, {requireEmail: this.props.mode === 'signup'})
+    let errors = l.validateFields(fields, this.props.mode)
     if (_.isEmpty(errors)) {
       this.props.login(
         fields,
@@ -40,7 +40,10 @@ class LoginForm extends Component {
 
   render(){
     return(
-      <form className='login-form' onSubmit={this.login}>
+      <form className='user-form' onSubmit={this.login}>
+        {this.state.errors.general &&
+          <div className="form-error">{this.state.errors.general}</div>
+        }
         {this.props.mode === 'signup' &&
           <span>
             {this.state.errors.email &&

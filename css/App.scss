@@ -104,7 +104,6 @@ input[type="submit"] {
   display: inline-block;
 }
 .save-confirmation {
-  float: right;
   color: $green;
   opacity: 0;
   transition: opacity .4s ease-in-out;
@@ -112,6 +111,9 @@ input[type="submit"] {
   &.visible {
     opacity: 1;
   }
+}
+.edit-mix-container .save-confirmation {
+  float: right;
 }
 .mix-item-list {
   padding: 20px 0px;

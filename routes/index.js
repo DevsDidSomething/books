@@ -2,6 +2,7 @@ const models = require( '../models/index' )
 const Express = require( 'express' )
 const l = require( '../lib' )
 const _ = require( 'lodash' )
+const bcrypt = require( 'bcryptjs')
 
 let router  = Express.Router()
 
@@ -15,6 +16,7 @@ function requiresLogin( req, res, next ) {
 router.post('/:mix_uid/books', requiresLogin)
 router.delete('/:mix_uid', requiresLogin)
 router.post('/:mix_uid/order', requiresLogin)
+router.put('/user/:user_id', requiresLogin)
 router.put('/:mix_uid', requiresLogin)
 router.post('/mixes', requiresLogin)
 router.delete('/:mix_uid/books/:book_id', requiresLogin)
@@ -151,6 +153,44 @@ router.post('/:mix_uid/order', (req, res) => {
         return b.BookMix.order
       })
       res.json({status: 'success', message: 'Saved book', data: {mixUid: mix.uid, books: books}});
+    })
+  })
+})
+
+//Update user
+router.put('/user/:user_id', (req, res) => {
+  if (req.params.user_id !== req.user.id.toString()) {
+    return res.status(403).send({error: {user: {general: 'Not authorized to update this user'}}})
+  }
+  let errors = l.validateFields(req.body, 'update')
+  if (!_.isEmpty(errors)) {
+    return res.status(422).send({error: {user: errors}})
+  }
+  models.User.findOne({where: {id: req.user.id }}).then( (user) => {
+    models.User.findOne({where: {email: req.body.email, id: {not: user.id} }}).then( (existingEmail) => {
+      if (existingEmail){
+        return res.status(422).send({error: {user: {email: 'Email is taken'}}})
+      }
+      if (req.body.password) {
+        bcrypt.genSalt(10, (err, salt) => {
+          if (err) return res.status(422).send(err)
+          bcrypt.hash(req.body.password, salt, (err, hash) => {
+            if (err) return res.status(422).send('error hashing')
+            user.update({
+              email: req.body.email,
+              password: hash
+            }).then( (result) => {
+              res.json({status: 'success', message: 'Succesfully saved user', data: l.userData(user)});
+            })
+          })
+        })
+      } else {
+        user.update({
+          email: req.body.email
+        }).then( (result) => {
+          res.json({status: 'success', message: 'Succesfully saved user', data: l.userData(user)});
+        })
+      }
     })
   })
 })

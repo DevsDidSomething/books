@@ -18,7 +18,7 @@ let user = JSON.parse(el.dataset.user)
 // Create Redux store with initial state
 const store = createStore(
   books,
-  {app: {errors: {}, searchResults: [], googleLoaded: false, user: user, allmixes: []}, bookshelf: {} },
+  {app: {errors: {}, searchResults: [], googleLoaded: false, user: user, allmixes: [], showSaveConfirmation: {}}, bookshelf: {} },
   applyMiddleware(thunk)
 )
 

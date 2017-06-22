@@ -35,10 +35,11 @@
     }
   }
 }
+.right-nav {
+  grid-column: 5 / 6;
+}
 .user-actions-container {
-  text-align: right;
   @media only screen and (max-width: 499px)  {
-    text-align: left;
     border: 1px solid $blue;
     background-color: #fff;
     width: 75%;
@@ -61,7 +62,6 @@
 
   @media only screen and (min-width: 500px)  {
     line-height: 5em;
-    grid-column: 5 / 6;
   }
 }
 
@@ -72,7 +72,8 @@
   }
 }
 
-.login-form {
+.user-form {
+  z-index: 10;
   padding: 5px 5px 5px 5px;
 
   input {
@@ -80,13 +81,14 @@
     margin: 5px 0px;
   }
 }
-.login-form-container {
+.user-form-container {
+  z-index: 10;
   line-height: 2em;
   background-color: white;
   padding-top: 25px;
   @media only screen and (min-width: 500px)  {
     position: absolute;
-    width: 180px;
+    width: 200px;
     margin-left: -180px;
     margin-top: 60px;
     border: 1px solid $blue;

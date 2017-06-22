@@ -43,6 +43,28 @@ export const login = ( userInfo, mode, fromHomepage ) => {
   }
 }
 
+export const updateUser = ( userInfo, id ) => {
+  return ( dispatch, getState ) => {
+    return fetch(`/m/user/${id}`, {
+      credentials: 'include',
+      method: 'PUT',
+      body: JSON.stringify(userInfo),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then( response => response.json() )
+    .then( json => {
+      if (json.error){
+        dispatch(receiveError(json.error))
+      } else {
+        dispatch(receiveUser(json.data))
+        dispatch(saveConfirmation({user: true}))
+      }
+    })
+  }
+}
+
 export const IS_FETCHING_BOOKSHELF = `${PREFIX}.IS_FETCHING_BOOKSHELF`;
 function setFetchingBookshelf(payload) {
   return {
@@ -180,7 +202,7 @@ export const addBook = ( book, mixUid ) => {
       } else {
         dispatch(receiveBooks(json.data))
         dispatch(getSearchResults([]))
-        dispatch(saveConfirmation(true))
+        dispatch(saveConfirmation({mix: true}))
       }
     })
   }
@@ -201,7 +223,7 @@ export const deleteBook = ( bookID, mixUid ) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveBooks(json.data))
-        dispatch(saveConfirmation(true))
+        dispatch(saveConfirmation({mix: true}))
       }
     })
   }
@@ -279,10 +301,10 @@ export const createMix = ( mixName ) => {
 }
 
 export const SAVE_CONFIRMATION = `${PREFIX}.SAVE_CONFIRMATION`;
-export const saveConfirmation = (value) => {
+export const saveConfirmation = (data) => {
   return {
     type: SAVE_CONFIRMATION,
-    payload: value
+    payload: data
   }
 }
 
@@ -302,7 +324,7 @@ export const updateMixOrder = ( mixUid, bookOrder ) => {
         dispatch(receiveError(json.error))
       } else {
         dispatch(receiveBooks(json.data))
-        dispatch(saveConfirmation(true))
+        dispatch(saveConfirmation({mix: true}))
       }
     })
   }
@@ -327,7 +349,7 @@ export const updateMix = ( mixUid, mixName ) => {
         dispatch(receiveMixes(json.data))
         const mix = _.find(json.data, ['uid', mixUid])
         dispatch(pushToPath(`/${currentUsername}/${mixUid}/${mix.webstring}`))
-        dispatch(saveConfirmation(true))
+        dispatch(saveConfirmation({mix: true}))
       }
     })
   }

@@ -1,30 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import LoginMenu from '../components/LoginMenu'
-import { bindActionCreators } from 'redux'
-import { login } from '../actions'
+import UserMenu from '../components/UserMenu'
+import { login, updateUser, saveConfirmation } from '../actions'
 require('../css/Header.scss')
 
 class Header extends Component {
-  constructor(props) {
-    super(props)
-    this.toggleForm = this.toggleForm.bind(this)
-    this.state = {
-      open: false
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user) {
-      this.setState({open: false})
-    }
-  }
-
-  toggleForm(){
-    this.setState({open: !this.state.open})
-  }
-
   render() {
     return (
       <div className="nav-container">
@@ -45,21 +26,7 @@ class Header extends Component {
             </h1>
           }
         </div>
-        <div onClick={this.toggleForm} className={this.state.open ? 'button hamburger open' : 'button hamburger'}>{this.state.open ? '×' : '☰'}</div>
-        {this.props.user &&
-          <div className={this.state.open ? 'user-actions-container open' : 'user-actions-container'}>
-            <Link className='button' to={`/${this.props.user.username}`}>{this.props.user.username}</Link>
-            <span className="divider">
-              {'/'}
-            </span>
-            <a className='logout button' href="/logout">logout</a>
-          </div>
-        }
-        {!this.props.user &&
-          <div className={this.state.open ? 'user-actions-container open' : 'user-actions-container'}>
-            <LoginMenu login={this.props.login} fromHomepage={this.props.fromHomepage} errors={this.props.errors} open={this.state.open}/>
-          </div>
-        }
+        <UserMenu showSaveConfirmation={this.props.showSaveConfirmation} saveConfirmation={this.props.saveConfirmation} user={this.props.user} updateUser={this.props.updateUser} login={this.props.login} fromHomepage={this.props.fromHomepage} errors={this.props.errors} />
       </div>
     )
   }
@@ -69,11 +36,14 @@ const mapStateToProps = (state, ownProps) => ({
   user: state.app.user,
   currentUsername: ownProps.params.username,
   fromHomepage: ownProps.params.username ? false : true,
-  errors: state.app.errors.user
+  errors: state.app.errors.user,
+  showSaveConfirmation: state.app.showSaveConfirmation.user,
 })
 
 const mapDispatchToProps = ({
-  login: login
+  login: login,
+  updateUser: updateUser,
+  saveConfirmation: saveConfirmation
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

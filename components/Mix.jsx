@@ -34,7 +34,7 @@ class Mix extends Component {
   }
 
   removeSaveConfirmation(){
-    this.props.saveConfirmation(false)
+    this.props.saveConfirmation({mix: false})
   }
 
   componentDidMount(){

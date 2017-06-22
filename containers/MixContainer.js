@@ -9,7 +9,7 @@ const mapStateToProps = (state, ownProps) => {
     errors: state.app.errors,
     searchResults: state.app.searchResults,
     isSearching: state.app.isSearching,
-    showSaveConfirmation: state.app.showSaveConfirmation,
+    showSaveConfirmation: state.app.showSaveConfirmation.mix,
     isFetchingBookshelf: state.app.isFetchingBookshelf,
     username: state.bookshelf.user.username,
     canEdit: (state.app.user.id === ownProps.mix.UserId) || state.app.user.admin,
