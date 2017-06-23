@@ -99,4 +99,18 @@
 }
 
 
-// Search Books
+// Edit
+.form-section {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+.section-label {
+  grid-column: 1;
+}
+.section-content {
+  grid-column: 2 / 9;
+}
+.privacy-description {
+  font-style: italic;
+  color: $lightgray;
+}

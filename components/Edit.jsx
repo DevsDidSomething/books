@@ -9,8 +9,11 @@ class Edit extends Component {
     this.deleteMix = this.deleteMix.bind(this)
     this.addBook = this.addBook.bind(this)
     this.updateMix = this.updateMix.bind(this)
+    this.updateMixName = this.updateMixName.bind(this)
+    this.togglePrivacy = this.togglePrivacy.bind(this)
     this.state = {
       mixName: this.props.mix.name,
+      isPrivate: this.props.mix.isPrivate,
       mode: 'default',
       searchTerm: ''
     }
@@ -46,9 +49,8 @@ class Edit extends Component {
     }
   }
 
-  updateMix(e){
-    e.preventDefault()
-    this.props.updateMix(this.props.mix.uid, this.state.mixName)
+  updateMix(attribs){
+    this.props.updateMix(this.props.mix.uid, attribs)
   }
 
   deleteMix(){
@@ -61,16 +63,47 @@ class Edit extends Component {
     }
   }
 
+  togglePrivacy(){
+    const newPrivacy = !this.state.isPrivate
+    this.setState({isPrivate: newPrivacy})
+    this.updateMix({isPrivate: newPrivacy})
+  }
+
+  updateMixName(e){
+    e.preventDefault()
+    this.updateMix({name: this.state.mixName})
+  }
+
   render() {
     return (
       <div className='edit-mix-container'>
         {this.props.errors &&
           <div className="form-error">{this.props.errors}</div>
         }
-        <form className='edit-form-row' onSubmit={this.updateMix}>
-          <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
-          <input type="submit" value="Update Title"/>
-        </form>
+        <div className='edit-form-row form-section'>
+          <div className="section-label">
+            Title:
+          </div>
+          <form className='section-content' onSubmit={this.updateMixName}>
+            <input type="text" className="mix-title-field" value={this.state.mixName} onChange={(e) => this.setState({mixName: e.target.value})}/>
+            <input type="submit" value="Update Title"/>
+          </form>
+        </div>
+        <div className='edit-form-row form-section'>
+          <div className="section-label">
+            Privacy:
+          </div>
+          <div className="section-content">
+            <div>
+              <input type="radio" name="isPrivate" value="false" checked={!this.state.isPrivate} onChange={this.togglePrivacy} />
+              Public - <span className="privacy-description">This mix may be listed publicly, and on your user page.</span>
+            </div>
+            <div>
+              <input type="radio" name="isPrivate" value="true" checked={this.state.isPrivate} onChange={this.togglePrivacy} />
+              Private - <span className="privacy-description">Mix can be found at the url, but not searchable or listed on user page.</span>
+            </div>
+          </div>
+        </div>
         <div className='edit-form-row'>
           <div className='search-book button' onClick={this.addingBookMode}>{this.state.mode === 'addingBook' ? '-Add a Book' : '+Add a Book'}</div>
         </div>
@@ -84,7 +117,7 @@ class Edit extends Component {
           </div>
         }
         <div className='edit-form-row'>
-          <div className='delete-mix button' onClick={this.deleteMix}>Delete this mix</div>
+          <div className='delete-mix button' onClick={this.deleteMix}>Delete mix</div>
           <div className={this.props.showSaveConfirmation ? 'save-confirmation visible' : 'save-confirmation'}>Changes saved!</div>
         </div>
         <span className='close-form' onClick={this.props.toggleEdit}>&times;</span>

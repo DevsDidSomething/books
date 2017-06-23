@@ -29,44 +29,30 @@ class Books extends Component {
     this.props.createMix(this.state.mixName)
   }
 
-  renderMixItems(user) {
-    if (user.Mixes.length) {
-      return (
-        <span>
-          <span className={this.props.params.mix_id ? 'mix-item' : 'mix-item selected'}>
-            <Link to={`/${user.username}`}>
-              All
-            </Link>
-            <span className="separator">&bull;</span>
-          </span>
-          {user.Mixes.map( (mix, i) =>
-            <MixItem
-              key={ mix.id }
-              username={ user.username }
-              mix={ mix }
-              selected={ this.props.params.mix_id === mix.uid }
-              isLast={ i === user.Mixes.length-1 } />
-          )}
-        </span>
+  renderMixItems(mixes) {
+    return (
+      mixes.map( (mix, i) =>
+        <MixItem
+          key={ mix.id }
+          username={ this.props.bookshelf.user.username }
+          mix={ mix }
+          selected={ this.props.params.mix_id === mix.uid }
+          isLast={ i === mixes.length-1 } />
       )
-    }
+    )
   }
 
-  renderMixes(bookshelf) {
-    if (bookshelf.mixes.length) {
-      return (
-        <span>
-          {bookshelf.mixes.map( (mix, i) =>
-            <MixContainer
-              key= {`mix-${mix.id}`}
-              params={this.props.params}
-              mix={mix}
-              previewBook={this.previewBook}
-            />
-          )}
-        </span>
+  renderMixes(mixes) {
+    return (
+      mixes.map( (mix, i) =>
+        <MixContainer
+          key= {`mix-${mix.id}`}
+          params={this.props.params}
+          mix={mix}
+          previewBook={this.previewBook}
+        />
       )
-    }
+    )
   }
 
   previewBook( book ) {
@@ -88,25 +74,60 @@ class Books extends Component {
   }
 
   render() {
-    let bookString;
+    let bookString, mixes, privateMixes;
     if (this.state.previewing){
       bookString = l.createWebString(this.state.previewing.title)
     }
+    const mixItems = _.filter(this.props.bookshelf.user.Mixes, ['isPrivate', false])
+    const privateMixItems = _.filter(this.props.bookshelf.user.Mixes, ['isPrivate', true])
+    if (this.props.params.mix_id) {
+      mixes = this.props.bookshelf.mixes
+    } else {
+      mixes = _.filter(this.props.bookshelf.mixes, ['isPrivate', false])
+      privateMixes = _.filter(this.props.bookshelf.mixes, ['isPrivate', true])
+    }
+
     return (
       <div>
         <div className='mix-item-list'>
-          {this.renderMixItems(this.props.bookshelf.user)}
+          <span>
+            <span className={this.props.params.mix_id ? 'mix-item' : 'mix-item selected'}>
+              <Link to={`/${this.props.bookshelf.user.username}`}>
+                All
+              </Link>
+              <span className="separator">&bull;</span>
+            </span>
+            {this.renderMixItems(mixItems)}
+          </span>
           {this.props.bookshelf.user.id === this.props.app.user.id &&
             <span className='create-mix button' onClick={this.creatingMixMode}>{this.state.mode === 'creatingMix' ? '-Create New Mix' : '+Create New Mix'}</span>
           }
         </div>
+        {!_.isEmpty(privateMixItems) &&
+          <div className='mix-private-list'>
+            <div className="privacy-description">
+              Private Mixes
+            </div>
+            {this.renderMixItems(privateMixItems)}
+          </div>
+        }
         {this.state.mode === 'creatingMix' &&
           <form onSubmit={this.createMix}>
             <input className="mix-title-field" onChange={(e) => this.setState({mixName: e.target.value})} type="text" placeholder="Come up with an unusually specific title" />
             <input type="submit" value="Create Mix"/>
           </form>
         }
-        {this.renderMixes(this.props.bookshelf)}
+        <div className="mix-list">
+          {this.renderMixes(mixes)}
+        </div>
+        {!_.isEmpty(privateMixes) &&
+          <div className='mix-list mix-private-list'>
+            <div className="privacy-description">
+              Private Mixes
+            </div>
+            {this.renderMixes(privateMixes)}
+          </div>
+        }
         <div className={this.state.previewing ? 'google-preview-container previewing' : 'google-preview-container'}>
           <a className='buy-book button' target="_blank" href={`https://www.indiebound.org/search/book?searchfor=${bookString}`}>Buy this book</a>
           {this.state.bookNotFound &&

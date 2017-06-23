@@ -14,10 +14,8 @@ https://github.com/ReactTraining/react-router/blob/master/packages/react-router-
 
 TODO:
 
-- user settings: change email/pword
+- version css
 - user settings: allow for private lists?
 - search for user
 - dedupe search results by isbn. maybe use https://twitter.com/gluejar/status/877214776123957249
 - like/follow lists?
-- ssl
-- make username not case-sensitive

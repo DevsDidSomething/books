@@ -3,7 +3,8 @@ module.exports = function(sequelize, DataTypes) {
   var Mix = sequelize.define('Mix', {
     name: DataTypes.STRING,
     webstring: DataTypes.STRING,
-    uid: DataTypes.STRING
+    uid: DataTypes.STRING,
+    isPrivate: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {

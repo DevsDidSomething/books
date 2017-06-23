@@ -24,22 +24,32 @@ router.delete('/:mix_uid/books/:book_id', requiresLogin)
 const publicUserAttributes = ['id', 'username']
 
 // Get a full bookshelf (initial load)
+//TODO do not show empty mixes
 router.get('/allmixes', (req, res) => {
-  models.Mix.findAll({include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
+  models.Mix.findAll({where: {isPrivate: false}, include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
     res.json({status: 'success', message: 'Retrieved all mixes', data: mixes})
   })
 })
 
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
-  models.User.findOne({where: {username: {ilike: req.params.username}}, attributes: publicUserAttributes, include: [ models.Mix ]}).then( (user) => {
+  const isAllowed = req.isAuthenticated() && (req.user.username === req.params.username || req.user.username === 'kray')
+  const scope = isAllowed ? {} : {isPrivate: false}
+  models.User.findOne({where: {username: {ilike: req.params.username}}, attributes: publicUserAttributes, include: [ {model: models.Mix, where: scope} ]}).then( (user) => {
+    if (_.isEmpty(user)) {
+      return res.status(404).send({error: {bookshelf: {fetching: 'Mix not found'}}})
+    }
     if ( req.params.mix_uid === 'false' ) {
-      models.Mix.findAll({where: {UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
+      scope['UserId'] = user.id
+      models.Mix.findAll({where: scope, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
         let bookshelf = {user: user, mixes: mixes}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
       })
     } else {
       models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mix) => {
+        if (_.isEmpty(mix)) {
+          return res.status(404).send({error: {bookshelf: {fetching: 'Mix not found'}}})
+        }
         let bookshelf = {user: user, mixes: [mix]}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
       })
@@ -201,12 +211,15 @@ router.put('/:mix_uid', (req, res) => {
     if (mix.UserId !== req.user.id && req.user.username !== 'kray') {
       return res.status(403).send({error: {mix: {edit: 'Not authorized to delete this mix'}}})
     }
-    let name = req.body.name
-    let webstring = l.createWebString(name)
-    mix.update({
-      name: name,
-      webstring: webstring
-    }).then( (result) => {
+    let attribs = {}
+    if (_.has(req.body, 'name')) {
+      attribs['name'] = req.body.name
+      attribs['webstring'] = l.createWebString(req.body.name)
+    }
+    if (_.has(req.body, 'isPrivate')) {
+      attribs['isPrivate'] = req.body.isPrivate
+    }
+    mix.update(attribs).then( (result) => {
       models.Mix.findAll({where: {UserId: req.user.id}}).then( (mixes) => {
         res.json({status: 'success', message: 'Saved mix', data: mixes});
       })

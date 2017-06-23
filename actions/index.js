@@ -92,8 +92,10 @@ export const getBookshelf = (username, mixUid) => {
     .then( json => {
       if (json.error){
         dispatch(receiveError(json.error))
+        dispatch(setFetchingBookshelf(false))
       } else {
         dispatch(receiveBookshelf(json.data))
+        dispatch(receiveError({bookshelf: {fetching: null}}))
         dispatch(setFetchingBookshelf(false))
       }
     })
@@ -330,13 +332,13 @@ export const updateMixOrder = ( mixUid, bookOrder ) => {
   }
 }
 
-export const updateMix = ( mixUid, mixName ) => {
+export const updateMix = ( mixUid, attribs ) => {
   return ( dispatch, getState ) => {
     const currentUsername = getState().app.user.username
     return fetch(`/m/${mixUid}`, {
       credentials: 'include',
       method: 'PUT',
-      body: JSON.stringify({name: mixName}),
+      body: JSON.stringify(attribs),
       headers: {
         "Content-Type": "application/json"
       }
@@ -348,7 +350,9 @@ export const updateMix = ( mixUid, mixName ) => {
       } else {
         dispatch(receiveMixes(json.data))
         const mix = _.find(json.data, ['uid', mixUid])
-        dispatch(pushToPath(`/${currentUsername}/${mixUid}/${mix.webstring}`))
+        if (attribs.name) {
+          dispatch(pushToPath(`/${currentUsername}/${mixUid}/${mix.webstring}`))
+        }
         dispatch(saveConfirmation({mix: true}))
       }
     })

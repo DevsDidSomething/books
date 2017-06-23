@@ -14,11 +14,11 @@ class Books extends Component {
       const mixUid = params.mix_id || false
       const username = params.username
       const bookshelf = this.props.bookshelf
-      if (_.isEmpty(bookshelf)) {
-        this.props.getBookshelf(username, mixUid)
-      } else if (bookshelf.user.username.toLowerCase() !== username.toLowerCase()) {
+      if (_.isEmpty(bookshelf) && _.isEmpty(this.props.errors)) {
         this.props.getBookshelf(username, mixUid)
       } else if (currentMixId !== mixUid){
+        this.props.getBookshelf(username, mixUid)
+      } else if (bookshelf.user && bookshelf.user.username.toLowerCase() !== username.toLowerCase()) {
         this.props.getBookshelf(username, mixUid)
       }
     }
@@ -33,6 +33,11 @@ class Books extends Component {
   render(){
     return(
       <span>
+        {!_.isEmpty(this.props.errors) &&
+          <div>
+            {this.props.errors}
+          </div>
+        }
         {!_.isEmpty(this.props.bookshelf) &&
           <Bookshelf
             params={this.props.params}
@@ -47,7 +52,15 @@ class Books extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return state
+  let errors = []
+  if (state.app.errors.bookshelf && state.app.errors.bookshelf.fetching) {
+    errors = state.app.errors.bookshelf.fetching
+  }
+  return {
+    errors: errors,
+    bookshelf: state.bookshelf,
+    app: state.app
+  }
 }
 
 const mapDispatchToProps = ({

@@ -24,9 +24,16 @@ a {
 div {
   box-sizing: border-box;
 }
-input, textarea {
-  -webkit-appearance: none;
-  -webkit-border-radius: 0;
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  appearance: none;
+  border-radius: 0;
   border: 1px solid $blue;
 }
 input:focus,
@@ -120,6 +127,21 @@ input[type="submit"] {
   @media only screen and (max-width: 499px)  {
     padding: 1em 10px;
   }
+}
+.mix-list {
+  margin: 1em 0em 2em 0em;
+}
+.mix-private-list {
+  background-color: $lightestgray;
+  padding: 5px 0px;
+  @media only screen and (max-width: 499px)  {
+    padding: 1em 10px;
+  }
+  .privacy-description {
+    padding: 5px 0px;
+  }
+  // border: 1px dashed $lightgray;
+  // padding: 10px;
 }
 .mix-item {
   color: $blue;
