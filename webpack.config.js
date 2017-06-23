@@ -1,12 +1,17 @@
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ManifestPlugin = require("webpack-manifest-plugin")
+
+const extractSass = new ExtractTextPlugin({
+  filename: 'bundle.[contenthash].css'
+})
 
 var config = {
   entry: './client/index.jsx',
   output: {
     path: path.join(__dirname, 'static'),
-    filename: 'bundle.js'
+    filename: 'bundle.[hash].js'
   },
   module : {
     rules : [
@@ -35,7 +40,7 @@ var config = {
   resolve: {
     extensions: ['.scss', '.js', '.jsx'],
   },
-  plugins: [new ExtractTextPlugin('bundle.css')],
+  plugins: [extractSass, new ManifestPlugin({fileName: 'build-manifest.json'})],
 };
 
 module.exports = config;

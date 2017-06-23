@@ -8,6 +8,8 @@ const passport = require( 'passport')
 const LocalStrategy = require( 'passport-local')
 const bcrypt = require( 'bcryptjs')
 const sslRedirect = require('heroku-ssl-redirect')
+const manifestPath = `${process.cwd()}/static/build-manifest.json`;
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
 
 const routes = require( './routes/index')
 const models = require( './models/index')
@@ -121,13 +123,18 @@ app.post('/signup',  (req, res, next) => {
 app.use('/m', routes)
 
 app.get('*', (req, res) => {
+  const jsLink = manifest['main.js']
+  const cssLink = manifest['main.css']
   fs.readFile(path.join(__dirname+'/client/index.html'), 'utf8', (err, htmlData)=>{
     if (err) {
       console.error('read err', err)
       return res.status(404).end()
     }
     const user = req.isAuthenticated() ? l.userData(req.user) : false
-    const RenderedApp = htmlData.replace('{{USER}}', JSON.stringify(user))
+    const RenderedApp = htmlData
+      .replace('{{USER}}', JSON.stringify(user))
+      .replace('{{JS}}', `/static/${jsLink}`)
+      .replace('{{CSS}}', `/static/${cssLink}`)
     res.send(RenderedApp)
   })
 });
