@@ -33,7 +33,7 @@ class Home extends Component {
                 key={ mix.id }
                 username={ mix.User.username }
                 mix={ mix }
-                isLast={ i === this.props.mixes.length-1 } />
+                isLast={ i === mixes.length-1 } />
             )}
           </div>
         }
