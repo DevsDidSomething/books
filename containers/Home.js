@@ -10,6 +10,7 @@ class Home extends Component {
   }
 
   render(){
+    const mixes = _.filter(this.props.mixes, (m) => {return m.booksCount !== '0'})
     return(
       <div className="home">
         {!this.props.user &&
@@ -25,9 +26,9 @@ class Home extends Component {
         <h2>
           Browse some people's shelves:
         </h2>
-        {this.props.mixes &&
+        {mixes &&
           <div className='mix-item-list'>
-            {this.props.mixes.map( (mix, i) =>
+            {mixes.map( (mix, i) =>
               <MixItem
                 key={ mix.id }
                 username={ mix.User.username }

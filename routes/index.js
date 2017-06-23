@@ -3,6 +3,7 @@ const Express = require( 'express' )
 const l = require( '../lib' )
 const _ = require( 'lodash' )
 const bcrypt = require( 'bcryptjs')
+const Sequelize = require('sequelize')
 
 let router  = Express.Router()
 
@@ -24,9 +25,13 @@ router.delete('/:mix_uid/books/:book_id', requiresLogin)
 const publicUserAttributes = ['id', 'username']
 
 // Get a full bookshelf (initial load)
-//TODO do not show empty mixes
 router.get('/allmixes', (req, res) => {
-  models.Mix.findAll({where: {isPrivate: false}, include: [ {model: models.User, attributes: ['username']} ]}).then( (mixes) => {
+  models.Mix.findAll({
+    where: {isPrivate: false},
+    attributes: {include: [[Sequelize.fn("COUNT", Sequelize.col("Books.id")), "booksCount"]]},
+    include: [{model: models.Book, attributes: []},{model: models.User, attributes: ['username']} ],
+    group: ['Mix.id','Books.BookMix.BookId','Books.BookMix.MixId', 'User.id']})
+  .then( (mixes) => {
     res.json({status: 'success', message: 'Retrieved all mixes', data: mixes})
   })
 })
