@@ -39,20 +39,21 @@ router.get('/allmixes', (req, res) => {
 // Get a full bookshelf (initial load)
 router.get('/:username/:mix_uid', (req, res) => {
   const isAllowed = req.isAuthenticated() && (req.user.username === req.params.username || req.user.username === 'kray')
-  const scope = isAllowed ? {} : {isPrivate: false}
-  models.User.findOne({where: {username: {ilike: req.params.username}}, attributes: publicUserAttributes, include: [ {model: models.Mix, where: scope} ]}).then( (user) => {
+  const scope1 = isAllowed ? {model: models.Mix} : {model: models.Mix, where: {isPrivate: false}}
+  models.User.findOne({where: {username: {ilike: req.params.username}}, attributes: publicUserAttributes, include: [ scope1 ]}).then( (user) => {
     if (_.isEmpty(user)) {
       return res.status(404).send({error: {bookshelf: {fetching: 'Mix not found'}}})
     }
+    const scope2 = {isPrivate: false}
     if ( req.params.mix_uid === 'false' ) {
-      scope['UserId'] = user.id
-      models.Mix.findAll({where: scope, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
+      scope2['UserId'] = user.id
+      models.Mix.findAll({where: scope2, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mixes) => {
         let bookshelf = {user: user, mixes: mixes}
         res.json({status: 'success', message: 'Retrieved all books', data: bookshelf})
       })
     } else {
       models.Mix.findOne({where: {uid: req.params.mix_uid, UserId: user.id}, include: [ models.Book ], order: [[ models.Book, models.BookMix, "order", "ASC" ]]}).then( (mix) => {
-        if (_.isEmpty(mix)) {
+        if (req.params.mix_uid && _.isEmpty(mix)) {
           return res.status(404).send({error: {bookshelf: {fetching: 'Mix not found'}}})
         }
         let bookshelf = {user: user, mixes: [mix]}
