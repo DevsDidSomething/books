@@ -125,7 +125,7 @@ app.use('/m', routes)
 app.get('*', (req, res) => {
   const jsLink = manifest['main.js']
   const cssLink = manifest['main.css']
-  fs.readFile(path.join(__dirname+'/client/index.html'), 'utf8', (err, htmlData)=>{
+  fs.readFile(path.join(__dirname+'/../client/index.html'), 'utf8', (err, htmlData)=>{
     if (err) {
       console.error('read err', err)
       return res.status(404).end()

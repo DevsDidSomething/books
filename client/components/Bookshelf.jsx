@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MixItem from './MixItem'
 import MixContainer from '../containers/MixContainer'
 import { Link } from 'react-router-dom'
-import * as l from '../../lib'
+import * as l from '../../server/lib'
 
 class Books extends Component {
   constructor(props) {

@@ -2,17 +2,17 @@
   "name": "boox",
   "version": "1.0.0",
   "description": "Book mixtapes",
-  "main": "index.js",
+  "main": "server/index.js",
   "engines": {
     "node": "6.11.0"
   },
   "scripts": {
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack --env=dev -d --watch",
-    "watch:server": "nodemon index.js --exec babel-node",
+    "watch:server": "nodemon server --exec babel-node",
     "build": "NODE_ENV=production webpack --env=prod --progress --colors",
     "heroku-postbuild": "npm run build",
-    "start": "node index.js"
+    "start": "node server"
   },
   "author": "Kate Ray",
   "license": "ISC",
