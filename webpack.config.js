@@ -17,7 +17,6 @@ var config = {
     rules : [
       {
         test: /\.scss$/,
-        include: path.resolve(__dirname, 'css'),
         use: ExtractTextPlugin.extract({
           use: [{
             loader: "css-loader"
