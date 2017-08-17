@@ -35,7 +35,6 @@ function loadGoogle() {
 
 loadGoogle()
 
-
 render(
   <Provider store={store}>
     <BrowserRouter>
